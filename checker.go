@@ -21,7 +21,6 @@ var (
 type Checker struct{}
 
 func (c Checker) IsKiriban(v int) (bool, []Kind) {
-
 	if v < minKiribanValue {
 		return false, nil
 	}

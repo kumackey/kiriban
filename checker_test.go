@@ -26,10 +26,12 @@ func TestChecker_IsKiriban(t *testing.T) {
 		"90 is not kiriban":     {90, out{isKiriban: false}},
 	}
 
+	checker := Checker{}
+
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			checker := Checker{}
 			isKiriban, kinds := checker.IsKiriban(test.input)
+
 			assert.Equal(t, test.output.isKiriban, isKiriban)
 			assert.Equal(t, test.output.kinds, kinds)
 		})
