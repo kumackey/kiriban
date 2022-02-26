@@ -14,31 +14,38 @@ const (
 )
 
 var (
-	seriesOfZeros = regexp.MustCompile(`^[1-9]0+$`)
-	repdigit      = regexp.MustCompile(`^(1+|2+|3+|4+|5+|6+|7+|8+|9+)$`)
+	seriesOfZero = regexp.MustCompile(`^[1-9]0+$`)
+	repdigit     = regexp.MustCompile(`^(1+|2+|3+|4+|5+|6+|7+|8+|9+)$`)
 )
 
 type Checker struct{}
 
-func (c Checker) IsKiriban(v int) bool {
+func (c Checker) IsKiriban(v int) (bool, []Kind) {
+
 	if v < minKiribanValue {
-		return false
+		return false, nil
 	}
 
+	kinds := c.judgeKinds(v)
+
+	return 0 < len(kinds), kinds
+}
+
+func (c Checker) judgeKinds(v int) []Kind {
+	var kinds []Kind
 	str := strconv.Itoa(v)
 
-	// consecutive numbers
 	if strings.Contains(zeroToNine, str) || strings.Contains(NineToZero, str) {
-		return true
+		kinds = append(kinds, KindConsecutive{})
 	}
 
-	if seriesOfZeros.MatchString(str) {
-		return true
+	if seriesOfZero.MatchString(str) {
+		kinds = append(kinds, KindSeriesOfZero{})
 	}
 
 	if repdigit.MatchString(str) {
-		return true
+		kinds = append(kinds, KindRepdigit{})
 	}
 
-	return false
+	return kinds
 }
