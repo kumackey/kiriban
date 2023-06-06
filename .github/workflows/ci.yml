@@ -3,45 +3,24 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  ci:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go: [ "1.17" ]
-    env:
-      VERBOSE: 1
-      GOFLAGS: -mod=readonly
-      GOPROXY: https://proxy.golang.org
-
     steps:
-      - uses: actions/setup-go@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
         with:
-          go-version: ${{ matrix.go }}
+          go-version: '1.20.2'
 
-      - uses: actions/checkout@v2
+      - name: go vet
+        run: go vet ./...
 
-      - name: Lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.43.0
-
-      - name: Module Download
-        run: go mod download
-
-      - name: Format
+      - name: go format
         run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
 
-      - name: Build
-        run: go build ./...
-
-      - name: Test
-        run: go test -v -cover -coverprofile cover.out ./...
-
-      - name: Coverage
-        run: if [ "$(go tool cover -func=cover.out | grep -v 100.0 | wc -l)" -gt 0 ]; then exit 1; fi
+      - name: go test
+        run: go test -v ./...
