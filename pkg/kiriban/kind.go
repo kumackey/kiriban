@@ -1,10 +1,5 @@
 package kiriban
 
-import (
-	"strconv"
-	"strings"
-)
-
 // enum
 const (
 	// Consecutive e.g. 123, 234, 345, 456, 567, 678, 789
@@ -18,28 +13,6 @@ const (
 )
 
 type Kind int
-
-func JudgeKinds(v int) []Kind {
-	if v < minKiribanValue {
-		return nil
-	}
-	var kinds []Kind
-	str := strconv.Itoa(v)
-
-	if strings.Contains(zeroToNine, str) || strings.Contains(NineToZero, str) {
-		kinds = append(kinds, Consecutive)
-	}
-
-	if seriesOfZero.MatchString(str) {
-		kinds = append(kinds, SeriesOfZero)
-	}
-
-	if repdigit.MatchString(str) {
-		kinds = append(kinds, Repdigit)
-	}
-
-	return kinds
-}
 
 func (k Kind) String() string {
 	switch k {
