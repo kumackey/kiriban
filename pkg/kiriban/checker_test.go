@@ -75,3 +75,31 @@ func TestChecker_Next(t *testing.T) {
 		})
 	}
 }
+
+func TestChecker_IsKiriban_Option(t *testing.T) {
+	nc := func(opts ...OptionFunc) *Checker {
+		c, _ := NewChecker(opts...)
+		return c
+	}
+	type input struct {
+		checker *Checker
+		val     int
+	}
+
+	tests := []struct {
+		name string
+		in   input
+		out  bool
+	}{
+		{"50 is kiriban when 50 min", input{nc(MinValue(50)), 50}, true},
+		{"50 is not kiriban when 51 min", input{nc(MinValue(51)), 50}, false},
+		{"56 is kiriban when 50 min", input{nc(MinValue(50)), 56}, true},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := test.in.checker
+			assert.Equal(t, test.out, c.IsKiriban(test.in.val))
+		})
+	}
+}

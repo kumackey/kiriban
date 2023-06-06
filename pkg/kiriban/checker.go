@@ -61,17 +61,17 @@ func (c *Checker) Next(v int) int {
 	}
 }
 
-func NewChecker(opts ...OptionFunc) (*Checker, error) {
-	defaultOpt := &options{
+func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
+	opts := &options{
 		minValue: minKiribanValue,
 	}
 
-	for _, opt := range opts {
-		err := opt(defaultOpt)
+	for _, opt := range optFuncs {
+		err := opt(opts)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return &Checker{opt: defaultOpt}, nil
+	return &Checker{opt: opts}, nil
 }
