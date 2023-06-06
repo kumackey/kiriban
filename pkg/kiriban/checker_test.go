@@ -37,6 +37,8 @@ func TestChecker_JudgeKinds(t *testing.T) {
 		out []Kind
 	}{
 		{100, []Kind{TrailingZeros}},
+		{2000, []Kind{TrailingZeros}},
+		{110000000, nil},
 		{101, nil},
 		{123, []Kind{Consecutive}},
 		{124, nil},
@@ -73,6 +75,13 @@ func TestChecker_Next(t *testing.T) {
 		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
 			assert.Equal(t, test.out, c.Next(test.in))
 		})
+	}
+}
+
+func BenchmarkChecker_IsKiriban(b *testing.B) {
+	c, _ := NewChecker()
+	for i := 0; i < b.N; i++ {
+		c.IsKiriban(i)
 	}
 }
 

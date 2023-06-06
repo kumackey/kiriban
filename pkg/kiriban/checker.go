@@ -1,7 +1,7 @@
 package kiriban
 
 import (
-	"regexp"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -11,11 +11,6 @@ const (
 
 	zeroToNine = "0123456789"
 	NineToZero = "9876543210"
-)
-
-var (
-	seriesOfZero = regexp.MustCompile(`^[1-9]0+$`)
-	repdigit     = regexp.MustCompile(`^(1+|2+|3+|4+|5+|6+|7+|8+|9+)$`)
 )
 
 type Checker struct {
@@ -34,21 +29,48 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 	}
 
 	var kinds []Kind
-	str := strconv.Itoa(v)
 
-	if strings.Contains(zeroToNine, str) || strings.Contains(NineToZero, str) {
+	if c.isConsecutive(v) {
 		kinds = append(kinds, Consecutive)
 	}
 
-	if seriesOfZero.MatchString(str) {
+	if c.isTrailingZeros(v) {
 		kinds = append(kinds, TrailingZeros)
 	}
 
-	if repdigit.MatchString(str) {
+	if c.isRepDigit(v) {
 		kinds = append(kinds, Repdigit)
 	}
 
 	return kinds
+}
+
+func (c *Checker) isConsecutive(v int) bool {
+	str := strconv.Itoa(v)
+	return strings.Contains(zeroToNine, str) || strings.Contains(NineToZero, str)
+}
+
+func (c *Checker) isTrailingZeros(num int) bool {
+	if num == 0 {
+		return false
+	}
+
+	for num%10 == 0 {
+		num /= 10
+	}
+
+	return 0 < num && num < 10
+}
+
+func (c *Checker) isRepDigit(v int) bool {
+	digits := len(strconv.Itoa(v))
+	for i := 0; i < 10; i++ {
+		if (int(math.Pow10(digits))-1)/9*i == v {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (c *Checker) Next(v int) int {
