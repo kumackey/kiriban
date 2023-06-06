@@ -12,7 +12,7 @@ func TestKind_String(t *testing.T) {
 		in   Kind
 		out  string
 	}{
-		{name: "series of zero", in: SeriesOfZero, out: "Series of zero"},
+		{name: "series of zero", in: TrailingZeros, out: "Trailing zeros"},
 		{name: "unknown", in: 999, out: "Unknown"},
 	}
 

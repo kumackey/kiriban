@@ -36,7 +36,7 @@ func TestChecker_JudgeKinds(t *testing.T) {
 		in  int
 		out []Kind
 	}{
-		{100, []Kind{SeriesOfZero}},
+		{100, []Kind{TrailingZeros}},
 		{101, nil},
 		{123, []Kind{Consecutive}},
 		{124, nil},

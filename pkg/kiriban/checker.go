@@ -41,7 +41,7 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 	}
 
 	if seriesOfZero.MatchString(str) {
-		kinds = append(kinds, SeriesOfZero)
+		kinds = append(kinds, TrailingZeros)
 	}
 
 	if repdigit.MatchString(str) {
