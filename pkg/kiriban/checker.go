@@ -51,6 +51,16 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 	return kinds
 }
 
+func (c *Checker) Next(v int) int {
+	// TODO: It takes a long time when the next number is too far away.
+	for {
+		v++
+		if c.IsKiriban(v) {
+			return v
+		}
+	}
+}
+
 func NewChecker(opts ...OptionFunc) (*Checker, error) {
 	defaultOpt := &options{
 		minValue: minKiribanValue,

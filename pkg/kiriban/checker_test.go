@@ -53,3 +53,25 @@ func TestChecker_JudgeKinds(t *testing.T) {
 		})
 	}
 }
+
+func TestChecker_Next(t *testing.T) {
+	tests := []struct {
+		in  int
+		out int
+	}{
+		{0, 100},
+		{99, 100},
+		{100, 111},
+		{101, 111},
+		{111, 123},
+		{123, 200},
+		{123456789, 200000000}, // too late...
+	}
+
+	c, _ := NewChecker()
+	for _, test := range tests {
+		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
+			assert.Equal(t, test.out, c.Next(test.in))
+		})
+	}
+}
