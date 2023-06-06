@@ -2,6 +2,10 @@
 
 ## Usage example
 
+```bash
+$ go get github.com/kumackey/kiriban
+```
+
 ```go:main.go
 package main
 
