@@ -32,7 +32,7 @@ type ExceptionalKiriban struct {
 }
 
 // ExceptionalKiribanOption sets exceptional kiribans.
-// Users can　set their own kiribans.
+// Users can set their own kiribans.
 func ExceptionalKiribanOption(eks []ExceptionalKiriban) OptionFunc {
 	return func(o *options) error {
 		o.exceptionalKiribans = eks
