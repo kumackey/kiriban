@@ -1,28 +1,33 @@
 package kiriban
 
-// enum
-const (
-	// Consecutive e.g. 123, 234, 345, 456, 567, 678, 789
-	Consecutive Kind = iota
+import "fmt"
 
-	// TrailingZeros e.g. 100, 1000, 10000
-	TrailingZeros
+type Kind interface {
+	String() string
+}
 
-	// Repdigit e.g. 111, 222, 333, 444, 555, 666, 777, 888, 999
-	Repdigit
-)
+type KindConsecutive struct{}
 
-type Kind int
+func (_ KindConsecutive) String() string {
+	return "Consecutive"
+}
 
-func (k Kind) String() string {
-	switch k {
-	case Consecutive:
-		return "Consecutive"
-	case TrailingZeros:
-		return "Trailing zeros"
-	case Repdigit:
-		return "Repdigit"
-	default:
-		return "Unknown"
-	}
+type KindTrailingZeros struct{}
+
+func (_ KindTrailingZeros) String() string {
+	return "Trailing zeros"
+}
+
+type KindRepdigit struct{}
+
+func (_ KindRepdigit) String() string {
+	return "Repdigit"
+}
+
+type KindExceptionalKiriban struct {
+	*ExceptionalKiriban
+}
+
+func (k KindExceptionalKiriban) String() string {
+	return fmt.Sprintf("Exceptional kiriban: %d, %s", k.Value, k.Reason)
 }

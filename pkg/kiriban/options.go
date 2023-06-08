@@ -2,22 +2,35 @@ package kiriban
 
 import "errors"
 
-type options struct {
-	minValue int
-}
-
 var (
 	ErrorInvalidMinValue = errors.New("invalid min value")
 )
 
+type options struct {
+	minValue            int
+	exceptionalKiribans []ExceptionalKiriban
+}
+
 type OptionFunc func(*options) error
 
-func MinValue(v int) OptionFunc {
+func MinValueFunc(v int) OptionFunc {
 	return func(o *options) error {
 		if v <= 0 {
 			return ErrorInvalidMinValue
 		}
 		o.minValue = v
+		return nil
+	}
+}
+
+type ExceptionalKiriban struct {
+	Value  int
+	Reason string
+}
+
+func ExceptionalKiribanFunc(eks []ExceptionalKiriban) OptionFunc {
+	return func(o *options) error {
+		o.exceptionalKiribans = eks
 		return nil
 	}
 }

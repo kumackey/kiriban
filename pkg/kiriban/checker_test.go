@@ -36,14 +36,14 @@ func TestChecker_JudgeKinds(t *testing.T) {
 		in  int
 		out []Kind
 	}{
-		{100, []Kind{TrailingZeros}},
-		{2000, []Kind{TrailingZeros}},
+		{100, []Kind{KindTrailingZeros{}}},
+		{2000, []Kind{KindTrailingZeros{}}},
 		{110000000, nil},
 		{101, nil},
-		{123, []Kind{Consecutive}},
+		{123, []Kind{KindConsecutive{}}},
 		{124, nil},
-		{321, []Kind{Consecutive}},
-		{111, []Kind{Repdigit}},
+		{321, []Kind{KindConsecutive{}}},
+		{111, []Kind{KindRepdigit{}}},
 		{110, nil},
 		{90, nil},
 	}
@@ -90,6 +90,13 @@ func TestChecker_IsKiriban_Option(t *testing.T) {
 		c, _ := NewChecker(opts...)
 		return c
 	}
+	exs := func(vals ...int) []ExceptionalKiriban {
+		eks := make([]ExceptionalKiriban, 0, len(vals))
+		for _, v := range vals {
+			eks = append(eks, ExceptionalKiriban{v, "sample reason"})
+		}
+		return eks
+	}
 	type input struct {
 		checker *Checker
 		val     int
@@ -100,9 +107,11 @@ func TestChecker_IsKiriban_Option(t *testing.T) {
 		in   input
 		out  bool
 	}{
-		{"50 is kiriban when 50 min", input{nc(MinValue(50)), 50}, true},
-		{"50 is not kiriban when 51 min", input{nc(MinValue(51)), 50}, false},
-		{"56 is kiriban when 50 min", input{nc(MinValue(50)), 56}, true},
+		{"50 is kiriban when 50 min", input{nc(MinValueFunc(50)), 50}, true},
+		{"50 is not kiriban when 51 min", input{nc(MinValueFunc(51)), 50}, false},
+		{"56 is kiriban when 50 min", input{nc(MinValueFunc(50)), 56}, true},
+		{"101 is kiriban when set as an exceptional kiriban", input{nc(ExceptionalKiribanFunc(exs(101, 103))), 101}, true},
+		{"102 is kiriban when not set as an exceptional kiriban", input{nc(ExceptionalKiribanFunc(exs(101, 103))), 102}, false},
 	}
 
 	for _, test := range tests {

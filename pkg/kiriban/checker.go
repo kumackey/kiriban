@@ -31,15 +31,19 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 	var kinds []Kind
 
 	if c.isConsecutive(v) {
-		kinds = append(kinds, Consecutive)
+		kinds = append(kinds, KindConsecutive{})
 	}
 
 	if c.isTrailingZeros(v) {
-		kinds = append(kinds, TrailingZeros)
+		kinds = append(kinds, KindTrailingZeros{})
 	}
 
 	if c.isRepDigit(v) {
-		kinds = append(kinds, Repdigit)
+		kinds = append(kinds, KindRepdigit{})
+	}
+
+	if ok, ex := isExceptionalKiriban(v, c.opt.exceptionalKiribans); ok {
+		kinds = append(kinds, KindExceptionalKiriban{ex})
 	}
 
 	return kinds
@@ -71,6 +75,16 @@ func (c *Checker) isRepDigit(v int) bool {
 	}
 
 	return false
+}
+
+func isExceptionalKiriban(v int, exs []ExceptionalKiriban) (bool, *ExceptionalKiriban) {
+	for _, e := range exs {
+		if v == e.Value {
+			return true, &e
+		}
+	}
+
+	return false, nil
 }
 
 func (c *Checker) Next(v int) int {

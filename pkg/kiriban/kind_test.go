@@ -12,8 +12,8 @@ func TestKind_String(t *testing.T) {
 		in   Kind
 		out  string
 	}{
-		{name: "series of zero", in: TrailingZeros, out: "Trailing zeros"},
-		{name: "unknown", in: 999, out: "Unknown"},
+		{name: "Trailing zeros", in: KindTrailingZeros{}, out: "Trailing zeros"},
+		{name: "Exceptional kiriban", in: KindExceptionalKiriban{&ExceptionalKiriban{1101, "birthday"}}, out: "Exceptional kiriban: 1101, birthday"},
 	}
 
 	for _, test := range tests {
