@@ -13,7 +13,7 @@ type options struct {
 
 type OptionFunc func(*options) error
 
-func MinValueFunc(v int) OptionFunc {
+func MinValueOption(v int) OptionFunc {
 	return func(o *options) error {
 		if v <= 0 {
 			return ErrorInvalidMinValue
@@ -28,7 +28,7 @@ type ExceptionalKiriban struct {
 	Reason string
 }
 
-func ExceptionalKiribanFunc(eks []ExceptionalKiriban) OptionFunc {
+func ExceptionalKiribanOption(eks []ExceptionalKiriban) OptionFunc {
 	return func(o *options) error {
 		o.exceptionalKiribans = eks
 		return nil

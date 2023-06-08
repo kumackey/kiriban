@@ -21,6 +21,7 @@ func TestChecker_IsKiriban(t *testing.T) {
 		{"111 is kiriban", 111, true},
 		{"110 is not kiriban", 110, false},
 		{"90 is not kiriban", 90, false},
+		{"0 is not kiriban", 0, false},
 	}
 
 	c, _ := NewChecker()
@@ -78,13 +79,6 @@ func TestChecker_Next(t *testing.T) {
 	}
 }
 
-func BenchmarkChecker_IsKiriban(b *testing.B) {
-	c, _ := NewChecker()
-	for i := 0; i < b.N; i++ {
-		c.IsKiriban(i)
-	}
-}
-
 func TestChecker_IsKiriban_Option(t *testing.T) {
 	nc := func(opts ...OptionFunc) *Checker {
 		c, _ := NewChecker(opts...)
@@ -107,11 +101,11 @@ func TestChecker_IsKiriban_Option(t *testing.T) {
 		in   input
 		out  bool
 	}{
-		{"50 is kiriban when 50 min", input{nc(MinValueFunc(50)), 50}, true},
-		{"50 is not kiriban when 51 min", input{nc(MinValueFunc(51)), 50}, false},
-		{"56 is kiriban when 50 min", input{nc(MinValueFunc(50)), 56}, true},
-		{"101 is kiriban when set as an exceptional kiriban", input{nc(ExceptionalKiribanFunc(exs(101, 103))), 101}, true},
-		{"102 is kiriban when not set as an exceptional kiriban", input{nc(ExceptionalKiribanFunc(exs(101, 103))), 102}, false},
+		{"50 is kiriban when 50 min", input{nc(MinValueOption(50)), 50}, true},
+		{"50 is not kiriban when 51 min", input{nc(MinValueOption(51)), 50}, false},
+		{"56 is kiriban when 50 min", input{nc(MinValueOption(50)), 56}, true},
+		{"101 is kiriban when set as an exceptional kiriban", input{nc(ExceptionalKiribanOption(exs(101, 103))), 101}, true},
+		{"102 is kiriban when not set as an exceptional kiriban", input{nc(ExceptionalKiribanOption(exs(101, 103))), 102}, false},
 	}
 
 	for _, test := range tests {

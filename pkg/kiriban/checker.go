@@ -98,6 +98,7 @@ func (c *Checker) Next(v int) int {
 }
 
 func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
+	// default options
 	opts := &options{
 		minValue: minKiribanValue,
 	}
