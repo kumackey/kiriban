@@ -5,7 +5,7 @@ import (
 	"github.com/kumackey/kiriban/pkg/kiriban"
 )
 
-func ExampleIsKiriban() {
+func ExampleChecker() {
 	c, _ := kiriban.NewChecker()
 
 	v1 := c.IsKiriban(10000)
@@ -27,7 +27,7 @@ func ExampleIsKiriban() {
 	// next kiriban of 100000 is 111111
 }
 
-func ExampleListUp() {
+func ExampleChecker_Next() {
 	c, _ := kiriban.NewChecker(kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{{Value: 1101, Reason: "birthday"}}))
 	val := 100
 	for val < 10000 {
