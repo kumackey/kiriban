@@ -1,11 +1,11 @@
-package examples_test
+package kiriban_test
 
 import (
 	"fmt"
 	"github.com/kumackey/kiriban/pkg/kiriban"
 )
 
-func ExampleChecker() {
+func ExampleChecker_IsKiriban() {
 	c, _ := kiriban.NewChecker()
 
 	v1 := c.IsKiriban(10000)
@@ -14,21 +14,26 @@ func ExampleChecker() {
 	v2 := c.IsKiriban(10001)
 	fmt.Printf("10001 is kiriban? -> %t\n", v2)
 
-	v3 := c.JudgeKinds(100000)
-	fmt.Printf("100000 is %s\n", v3[0])
-
-	v4 := c.Next(100000)
-	fmt.Printf("next kiriban of 100000 is %d\n", v4)
-
 	// Output:
 	// 10000 is kiriban? -> true
 	// 10001 is kiriban? -> false
+}
+
+func ExampleChecker_JudgeKinds() {
+	c, _ := kiriban.NewChecker()
+
+	v3 := c.JudgeKinds(100000)
+	fmt.Printf("100000 is %s\n", v3[0])
+	// Output:
 	// 100000 is Round number
-	// next kiriban of 100000 is 111111
 }
 
 func ExampleChecker_Next() {
-	c, _ := kiriban.NewChecker(kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{{Value: 1101, Reason: "birthday"}}))
+	c, _ := kiriban.NewChecker(kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{
+		// Any kiriban can be added.
+		{Value: 1101, Reason: "birthday"},
+	}))
+
 	val := 100
 	for val < 10000 {
 		fmt.Println(val, c.JudgeKinds(val)[0].String())
