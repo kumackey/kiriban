@@ -14,14 +14,12 @@ const (
 )
 
 type Checker struct {
-	opt *options
+	*options
 }
 
 // IsKiriban returns true if the given value is kiriban.
 func (c *Checker) IsKiriban(v int) bool {
-	kinds := c.JudgeKinds(v)
-
-	return 0 < len(kinds)
+	return 0 < len(c.JudgeKinds(v))
 }
 
 // JudgeKinds returns kiriban kinds of the given value.
@@ -31,7 +29,7 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 		v = -v
 	}
 
-	if v < c.opt.minValue {
+	if v < c.minValue {
 		return nil
 	}
 
@@ -49,7 +47,7 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 		kinds = append(kinds, KindRepdigit{})
 	}
 
-	if ok, ex := isExceptionalKiriban(v, c.opt.exceptionalKiribans); ok {
+	if ok, ex := isExceptionalKiriban(v, c.exceptionalKiribans); ok {
 		kinds = append(kinds, KindExceptionalKiriban{ex})
 	}
 
@@ -125,5 +123,5 @@ func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
 		}
 	}
 
-	return &Checker{opt: opts}, nil
+	return &Checker{opts}, nil
 }
