@@ -12,7 +12,7 @@ func TestKind_String(t *testing.T) {
 		in   Kind
 		out  string
 	}{
-		{name: "Trailing zeros", in: KindTrailingZeros{}, out: "Trailing zeros"},
+		{name: "Round Number", in: KindRoundNumber{}, out: "Round number"},
 		{name: "Exceptional kiriban", in: KindExceptionalKiriban{&ExceptionalKiriban{1101, "birthday"}}, out: "Exceptional kiriban: 1101, birthday"},
 	}
 

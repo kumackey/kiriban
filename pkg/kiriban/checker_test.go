@@ -22,6 +22,9 @@ func TestChecker_IsKiriban(t *testing.T) {
 		{"110 is not kiriban", 110, false},
 		{"90 is not kiriban", 90, false},
 		{"0 is not kiriban", 0, false},
+		{"-100 is kiriban", -100, true},
+		{"-111 is kiriban", -111, true},
+		{"-123 is kiriban", -123, true},
 	}
 
 	c, _ := NewChecker()
@@ -37,8 +40,8 @@ func TestChecker_JudgeKinds(t *testing.T) {
 		in  int
 		out []Kind
 	}{
-		{100, []Kind{KindTrailingZeros{}}},
-		{2000, []Kind{KindTrailingZeros{}}},
+		{100, []Kind{KindRoundNumber{}}},
+		{2000, []Kind{KindRoundNumber{}}},
 		{110000000, nil},
 		{101, nil},
 		{123, []Kind{KindConsecutive{}}},
@@ -103,7 +106,8 @@ func TestChecker_IsKiriban_Option(t *testing.T) {
 	}{
 		{"50 is kiriban when 50 min", input{nc(MinValueOption(50)), 50}, true},
 		{"50 is not kiriban when 51 min", input{nc(MinValueOption(51)), 50}, false},
-		{"56 is kiriban when 50 min", input{nc(MinValueOption(50)), 56}, true},
+		{"56 is not kiriban when 50 min", input{nc(MinValueOption(50)), 56}, false},
+		{"60 is kiriban when 50 min", input{nc(MinValueOption(50)), 60}, true},
 		{"101 is kiriban when set as an exceptional kiriban", input{nc(ExceptionalKiribanOption(exs(101, 103))), 101}, true},
 		{"102 is kiriban when not set as an exceptional kiriban", input{nc(ExceptionalKiribanOption(exs(101, 103))), 102}, false},
 	}

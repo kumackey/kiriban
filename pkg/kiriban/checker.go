@@ -10,20 +10,27 @@ const (
 	minKiribanValue = 100
 
 	zeroToNine = "0123456789"
-	NineToZero = "9876543210"
+	nineToZero = "9876543210"
 )
 
 type Checker struct {
 	opt *options
 }
 
+// IsKiriban returns true if the given value is kiriban.
 func (c *Checker) IsKiriban(v int) bool {
 	kinds := c.JudgeKinds(v)
 
 	return 0 < len(kinds)
 }
 
+// JudgeKinds returns kiriban kinds of the given value.
 func (c *Checker) JudgeKinds(v int) []Kind {
+	if v < 0 {
+		// If the value is negative, convert it to a positive value.
+		v = -v
+	}
+
 	if v < c.opt.minValue {
 		return nil
 	}
@@ -34,8 +41,8 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 		kinds = append(kinds, KindConsecutive{})
 	}
 
-	if c.isTrailingZeros(v) {
-		kinds = append(kinds, KindTrailingZeros{})
+	if c.isRoundNumber(v) {
+		kinds = append(kinds, KindRoundNumber{})
 	}
 
 	if c.isRepDigit(v) {
@@ -51,10 +58,16 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 
 func (c *Checker) isConsecutive(v int) bool {
 	str := strconv.Itoa(v)
-	return strings.Contains(zeroToNine, str) || strings.Contains(NineToZero, str)
+	if len(str) < 3 {
+		//　If the number is less than three digits,
+		//　it does not appear to be a continuous number and is not determined to be Consecutive.
+		// ex) 1, 12, 32
+		return false
+	}
+	return strings.Contains(zeroToNine, str) || strings.Contains(nineToZero, str)
 }
 
-func (c *Checker) isTrailingZeros(num int) bool {
+func (c *Checker) isRoundNumber(num int) bool {
 	if num == 0 {
 		return false
 	}
@@ -68,7 +81,7 @@ func (c *Checker) isTrailingZeros(num int) bool {
 
 func (c *Checker) isRepDigit(v int) bool {
 	digits := len(strconv.Itoa(v))
-	for i := 0; i < 10; i++ {
+	for i := 1; i < 10; i++ {
 		if (int(math.Pow10(digits))-1)/9*i == v {
 			return true
 		}
@@ -87,6 +100,7 @@ func isExceptionalKiriban(v int, exs []ExceptionalKiriban) (bool, *ExceptionalKi
 	return false, nil
 }
 
+// Next returns the next kiriban value.
 func (c *Checker) Next(v int) int {
 	// TODO: It takes a long time when the next number is too far away.
 	for {
@@ -97,6 +111,7 @@ func (c *Checker) Next(v int) int {
 	}
 }
 
+// NewChecker returns a new Checker.
 func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
 	// default options
 	opts := &options{

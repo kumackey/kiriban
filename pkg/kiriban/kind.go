@@ -2,28 +2,36 @@ package kiriban
 
 import "fmt"
 
+// Kind is a type of kiriban.
 type Kind interface {
 	String() string
 }
 
+// KindConsecutive is a kind of kiriban, which is consecutive numbers.
+// ex) 1234, 2345, 3456
 type KindConsecutive struct{}
 
 func (_ KindConsecutive) String() string {
 	return "Consecutive"
 }
 
-type KindTrailingZeros struct{}
+// KindRoundNumber is a kind of kiriban, which is round numbers.
+// ex) 10, 300, 2000
+type KindRoundNumber struct{}
 
-func (_ KindTrailingZeros) String() string {
-	return "Trailing zeros"
+func (_ KindRoundNumber) String() string {
+	return "Round number"
 }
 
+// KindRepdigit is a kind of kiriban, which is repdigit.
+// ex) 11, 222, 4444
 type KindRepdigit struct{}
 
 func (_ KindRepdigit) String() string {
 	return "Repdigit"
 }
 
+// KindExceptionalKiriban is a kind of kiriban, which is exceptional kiriban.
 type KindExceptionalKiriban struct {
 	*ExceptionalKiriban
 }
