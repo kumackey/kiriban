@@ -4,9 +4,6 @@ author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v4
-    - run: cd $GITHUB_ACTION_PATH && tree
-      shell: bash
     - run: go run $GITHUB_ACTION_PATH/cmd/main.go ${{ github.event.number }}
       shell: bash
 branding:
