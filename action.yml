@@ -4,8 +4,9 @@ author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: "composite"
   steps:
-    - run: go run cmd/main.go ${{ github.event.pull_request.number }}
+    - run: go run main.go ${{ github.event.pull_request.number }}
       shell: bash
+      working-directory: ./cmd
 branding:
-  icon: 'list'
-  color: 'gray-dark'
+  icon: 'gift'
+  color: 'orange'
