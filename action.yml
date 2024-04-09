@@ -2,11 +2,10 @@ name: 'Kiriban Action'
 description: 'This action checks if the number is kiriban.'
 author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
-  using: "composite"
-  steps:
-    - run: go run main.go ${{ github.event.pull_request.number }}
-      shell: bash
-      working-directory: cmd
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ github.event.pull_request.number }}
 branding:
   icon: 'gift'
   color: 'orange'
