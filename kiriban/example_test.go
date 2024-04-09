@@ -2,11 +2,11 @@ package kiriban_test
 
 import (
 	"fmt"
-	kiriban2 "github.com/kumackey/kiriban"
+	"github.com/kumackey/kiriban/kiriban"
 )
 
 func ExampleChecker_IsKiriban() {
-	c, _ := kiriban2.NewChecker()
+	c, _ := kiriban.NewChecker()
 
 	v1 := c.IsKiriban(10000)
 	fmt.Printf("10000 is kiriban? -> %t\n", v1)
@@ -20,7 +20,7 @@ func ExampleChecker_IsKiriban() {
 }
 
 func ExampleChecker_JudgeKinds() {
-	c, _ := kiriban2.NewChecker()
+	c, _ := kiriban.NewChecker()
 
 	v3 := c.JudgeKinds(100000)
 	fmt.Printf("100000 is %s\n", v3[0])
@@ -29,7 +29,7 @@ func ExampleChecker_JudgeKinds() {
 }
 
 func ExampleChecker_Next() {
-	c, _ := kiriban2.NewChecker(kiriban2.ExceptionalKiribanOption([]kiriban2.ExceptionalKiriban{
+	c, _ := kiriban.NewChecker(kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{
 		// Any kiriban can be added.
 		{Value: 1101, Reason: "birthday"},
 	}))

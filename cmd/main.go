@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/kumackey/kiriban"
+	"github.com/kumackey/kiriban/kiriban"
 	"log"
 	"os"
 	"strconv"

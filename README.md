@@ -25,6 +25,8 @@ jobs:
 
 ```
 
+![Actionの結果、コメントされる](img/comment.png)
+
 ## キリ番とは？
 
 https://ja.wikipedia.org/wiki/%E3%82%AD%E3%83%AA%E3%83%90%E3%83%B3
