@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
-	events := os.Getenv("INPUT_EVENTS")
-	fmt.Println(events)
+	args := os.Args[1:]
+	for _, arg := range args {
+		fmt.Println(arg)
+	}
 }

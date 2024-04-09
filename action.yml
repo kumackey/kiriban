@@ -4,10 +4,8 @@ author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: "composite"
   steps:
-    - run: go run cmd/main.go
+    - run: go run cmd/main.go　${{ github.event.pull_request.number }}
       shell: bash
-      with:
-        events: ${{ github.event.pull_request.number }}
 branding:
   icon: 'list'
   color: 'gray-dark'
