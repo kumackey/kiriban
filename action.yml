@@ -4,8 +4,12 @@ author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: 'composite'
   steps:
-    - run: go run $GITHUB_ACTION_PATH/cmd/main.go ${{ github.event.number }}
+    - id: check_kiriban
+      run: echo "is_kiriban=$(go run $GITHUB_ACTION_PATH/cmd/main.go ${{ github.event.number }})" >> $GITHUB_OUTPUT
       shell: bash
+    - run: gh issue comment ${{ github.event.number }} "Congratulations, this is kiriban!🎉"
+      shell: bash
+      if: steps.check_kiriban.outputs.is_kiriban == 'true'
 branding:
   icon: 'gift'
   color: 'orange'
