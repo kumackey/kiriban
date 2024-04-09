@@ -4,8 +4,7 @@ author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: 'composite'
   steps:
-    - id: check_kiriban
-      run: go run cmd/main.go ${{ github.event.number }}
+    - run: go run cmd/main.go ${{ github.event.number }}
       shell: bash
       working-directory: ${{ github.action_path }}
       env:
