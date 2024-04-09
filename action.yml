@@ -5,7 +5,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ github.event.number }}
+    - ${{ github.event.issue.number }}
 branding:
   icon: 'gift'
   color: 'orange'
