@@ -5,7 +5,12 @@ runs:
   using: 'composite'
   steps:
     - id: check_kiriban
-      run: echo "is_kiriban=$(go run cmd/main.go ${{ github.event.number }})" >> $GITHUB_OUTPUT
+      run: |
+        pwd
+        tree
+        result=$(go run cmd/main.go ${{ github.event.number }})
+        echo $result
+        echo "is_kiriban=$result" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ github.workspace }}
     - run: gh issue comment ${{ github.event.number }} "Congratulations, this is kiriban!🎉"
