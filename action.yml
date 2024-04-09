@@ -6,7 +6,7 @@ runs:
   steps:
     - run: go run main.go ${{ github.event.pull_request.number }}
       shell: bash
-      working-directory: ./cmd
+      working-directory: cmd
 branding:
   icon: 'gift'
   color: 'orange'
