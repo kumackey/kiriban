@@ -21,5 +21,5 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	fmt.Printf("::set-output name=is_kiriban::%t\n", c.IsKiriban(prNumber))
+	fmt.Println(c.IsKiriban(prNumber))
 }
