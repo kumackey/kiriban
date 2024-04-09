@@ -5,6 +5,8 @@ runs:
   using: 'composite'
   steps:
     - uses: actions/checkout@v4
+    - run: tree
+      shell: bash
     - run: go run cmd/main.go ${{ github.event.number }}
       shell: bash
 branding:
