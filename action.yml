@@ -12,7 +12,7 @@ runs:
       working-directory: ${{ github.action_path }}
     - uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ env.GITHUB_TOKEN }}
         script: |
           const params = {
             owner: context.repo.owner,
