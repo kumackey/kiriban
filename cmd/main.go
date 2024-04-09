@@ -48,8 +48,10 @@ func main() {
 		log.Fatalln("GITHUB_REPOSITORY is not set.")
 	}
 	parts := strings.Split(repository, "/")
-	owner := parts[0]
-	repo := parts[1]
+	if len(parts) != 2 {
+		log.Fatalf("Invalid GITHUB_REPOSITORY: %s\n", repository)
+	}
+	owner, repo := parts[0], parts[1]
 
 	comment := &github.IssueComment{Body: github.String(
 		fmt.Sprintf("Congratulations! #%d is kiriban! 🎉", prNumber),
