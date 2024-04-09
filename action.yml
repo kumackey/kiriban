@@ -11,7 +11,6 @@ runs:
       shell: bash
       working-directory: ${{ github.action_path }}
     - uses: actions/github-script@v6
-      shell: bash
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
