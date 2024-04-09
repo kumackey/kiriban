@@ -1,0 +1,13 @@
+name: kiriban
+
+on:
+  pull_request:
+    types: [ opened ]
+
+jobs:
+  kiriban:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kumackey/kiriban@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
