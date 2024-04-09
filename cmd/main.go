@@ -14,8 +14,6 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	prNumber = 999
-
 	c, err := kiriban.NewChecker()
 	if err != nil {
 		log.Fatalln(err)
