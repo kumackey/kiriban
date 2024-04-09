@@ -23,7 +23,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if !c.IsKiriban(999) { // test!
+	if !c.IsKiriban(prNumber) {
 		fmt.Printf("#%d is not kiriban.\n", prNumber)
 		os.Exit(0)
 	}
