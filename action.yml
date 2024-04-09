@@ -5,9 +5,7 @@ runs:
   using: 'composite'
   steps:
     - id: check_kiriban
-      run: |
-        result=$(go run cmd/main.go ${{ github.event.number }})
-        echo "is_kiriban=$result" >> $GITHUB_OUTPUT
+      run: go run cmd/main.go ${{ github.event.number }}
       shell: bash
       working-directory: ${{ github.action_path }}
       env:

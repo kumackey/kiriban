@@ -2,12 +2,14 @@ name: kiriban
 
 on:
   pull_request:
-    types: [ opened ]
+    types:
+      - opened
+      - reopened
 
 jobs:
   kiriban:
     runs-on: ubuntu-latest
     steps:
-      - uses: kumackey/kiriban@v1
+      - uses: kumackey/kiriban@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
