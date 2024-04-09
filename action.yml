@@ -1,5 +1,5 @@
 name: 'Kiriban Action'
-description: 'This action checks if the number is kiriban.'
+description: 'キリ番を判定するGithub Actions'
 author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: 'composite'
