@@ -21,5 +21,5 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	fmt.Println(c.IsKiriban(prNumber))
+	fmt.Print(c.IsKiriban(prNumber))
 }
