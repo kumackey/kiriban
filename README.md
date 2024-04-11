@@ -12,6 +12,8 @@ issueやPR歓迎です。
 name: kiriban
 
 on:
+  issues:
+    types: [ opened ]
   pull_request:
     types: [ opened ]
 
