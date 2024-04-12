@@ -8,20 +8,35 @@ var (
 )
 
 type options struct {
-	minValue            int
-	exceptionalKiribans []ExceptionalKiriban
+	exceptionalKiribans          []ExceptionalKiriban
+	minConsecutiveDigits         int
+	digitBasedRoundDetermination bool
+	minRepDigitDigits            int
 }
 
 // OptionFunc is a function to set options.
 type OptionFunc func(*options) error
 
-// MinValueOption sets the minimum value.
-func MinValueOption(v int) OptionFunc {
+// SetMinConsecutiveDigits sets the minimum consecutive digits.
+func SetMinConsecutiveDigits(v int) OptionFunc {
 	return func(o *options) error {
-		if v <= 0 {
-			return ErrorInvalidMinValue
-		}
-		o.minValue = v
+		o.minConsecutiveDigits = v
+		return nil
+	}
+}
+
+// EnableDigitBasedRoundDetermination enables digit-based round determination.
+func EnableDigitBasedRoundDetermination() OptionFunc {
+	return func(o *options) error {
+		o.digitBasedRoundDetermination = true
+		return nil
+	}
+}
+
+// SetMinRepDigitDigits sets the minimum repdigit digits.
+func SetMinRepDigitDigits(v int) OptionFunc {
+	return func(o *options) error {
+		o.minRepDigitDigits = v
 		return nil
 	}
 }

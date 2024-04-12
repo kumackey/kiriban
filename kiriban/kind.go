@@ -15,12 +15,12 @@ func (_ KindConsecutive) String() string {
 	return "Consecutive"
 }
 
-// KindRoundNumber is a kind of kiriban, which is round numbers.
+// KindRound is a kind of kiriban, which is round numbers.
 // ex) 10, 300, 2000
-type KindRoundNumber struct{}
+type KindRound struct{}
 
-func (_ KindRoundNumber) String() string {
-	return "Round number"
+func (_ KindRound) String() string {
+	return "Round"
 }
 
 // KindRepdigit is a kind of kiriban, which is repdigit.

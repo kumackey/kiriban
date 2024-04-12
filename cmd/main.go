@@ -33,12 +33,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	c, err := kiriban.NewChecker()
+	d, err := kiriban.NewDeterminator(kiriban.EnableDigitBasedRoundDetermination())
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if !c.IsKiriban(issueNumber) {
+	if !d.IsKiriban(issueNumber) {
 		fmt.Printf("#%d is not kiriban.\n", issueNumber)
 		os.Exit(0)
 	}
