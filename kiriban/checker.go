@@ -11,17 +11,17 @@ const (
 	nineToZero = "9876543210"
 )
 
-type Checker struct {
+type Determinator struct {
 	*options
 }
 
 // IsKiriban returns true if the given value is kiriban.
-func (c *Checker) IsKiriban(v int) bool {
-	return 0 < len(c.JudgeKinds(v))
+func (c *Determinator) IsKiriban(v int) bool {
+	return 0 < len(c.KiribanKinds(v))
 }
 
-// JudgeKinds returns kiriban kinds of the given value.
-func (c *Checker) JudgeKinds(v int) []Kind {
+// KiribanKinds returns kiriban kinds of the given value.
+func (c *Determinator) KiribanKinds(v int) []Kind {
 	if v < 0 {
 		// If the value is negative, convert it to a positive value.
 		v = -v
@@ -33,8 +33,8 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 		kinds = append(kinds, KindConsecutive{})
 	}
 
-	if c.isRoundNumber(v) {
-		kinds = append(kinds, KindRoundNumber{})
+	if c.isRound(v) {
+		kinds = append(kinds, KindRound{})
 	}
 
 	if c.isRepDigit(v) {
@@ -48,7 +48,7 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 	return kinds
 }
 
-func (c *Checker) isConsecutive(v int) bool {
+func (c *Determinator) isConsecutive(v int) bool {
 	str := strconv.Itoa(v)
 	if len(str) < c.minConsecutiveDigits {
 		//　If the number is less than three digits,
@@ -59,7 +59,7 @@ func (c *Checker) isConsecutive(v int) bool {
 	return strings.Contains(zeroToNine, str) || strings.Contains(nineToZero, str)
 }
 
-func (c *Checker) isRoundNumber(num int) bool {
+func (c *Determinator) isRound(num int) bool {
 	str := strconv.Itoa(num)
 	if len(str) == 1 {
 		// 0, 1, 2, ...,9 are not round numbers.
@@ -77,7 +77,7 @@ func (c *Checker) isRoundNumber(num int) bool {
 	return strings.Trim(last, "0") == ""
 }
 
-func (c *Checker) isRepDigit(v int) bool {
+func (c *Determinator) isRepDigit(v int) bool {
 	digits := len(strconv.Itoa(v))
 	for i := 1; i < 10; i++ {
 		if (int(math.Pow10(digits))-1)/9*i == v {
@@ -99,7 +99,7 @@ func isExceptionalKiriban(v int, exs []ExceptionalKiriban) (bool, *ExceptionalKi
 }
 
 // Next returns the next kiriban value.
-func (c *Checker) Next(v int) int {
+func (c *Determinator) Next(v int) int {
 	// TODO: It takes a long time when the next number is too far away.
 	for {
 		v++
@@ -109,8 +109,8 @@ func (c *Checker) Next(v int) int {
 	}
 }
 
-// NewChecker returns a new Checker.
-func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
+// NewDeterminator returns a new Determinator.
+func NewDeterminator(optFuncs ...OptionFunc) (*Determinator, error) {
 	const (
 		defaultMinConsecutiveDigits = 3
 	)
@@ -127,5 +127,5 @@ func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
 		}
 	}
 
-	return &Checker{opts}, nil
+	return &Determinator{opts}, nil
 }

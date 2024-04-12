@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestChecker_IsKiriban(t *testing.T) {
+func TestDeterminator_IsKiriban(t *testing.T) {
 	tests := []struct {
 		name string
 		in   int
@@ -30,7 +30,7 @@ func TestChecker_IsKiriban(t *testing.T) {
 		{"-123 is kiriban", -123, true},
 	}
 
-	c, _ := NewChecker()
+	c, _ := NewDeterminator()
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			assert.Equal(t, test.out, c.IsKiriban(test.in))
@@ -38,13 +38,13 @@ func TestChecker_IsKiriban(t *testing.T) {
 	}
 }
 
-func TestChecker_JudgeKinds(t *testing.T) {
+func TestDeterminator_KiribanKinds(t *testing.T) {
 	tests := []struct {
 		in  int
 		out []Kind
 	}{
-		{100, []Kind{KindRoundNumber{}}},
-		{2000, []Kind{KindRoundNumber{}}},
+		{100, []Kind{KindRound{}}},
+		{2000, []Kind{KindRound{}}},
 		{110000000, nil},
 		{101, nil},
 		{123, []Kind{KindConsecutive{}}},
@@ -54,15 +54,17 @@ func TestChecker_JudgeKinds(t *testing.T) {
 		{110, nil},
 	}
 
-	c, _ := NewChecker()
+	c, _ := NewDeterminator()
 	for _, test := range tests {
 		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
-			assert.Equal(t, test.out, c.JudgeKinds(test.in))
+			assert.Equal(t, test.out, c.KiribanKinds(test.in))
 		})
 	}
 }
 
 func TestChecker_Next(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		in  int
 		out int
@@ -76,17 +78,18 @@ func TestChecker_Next(t *testing.T) {
 		{123456789, 200000000}, // too late...
 	}
 
-	c, _ := NewChecker()
+	c, _ := NewDeterminator()
 	for _, test := range tests {
 		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
+			t.Parallel()
 			assert.Equal(t, test.out, c.Next(test.in))
 		})
 	}
 }
 
 func TestChecker_IsKiriban_Option(t *testing.T) {
-	nc := func(opts ...OptionFunc) *Checker {
-		c, _ := NewChecker(opts...)
+	nc := func(opts ...OptionFunc) *Determinator {
+		c, _ := NewDeterminator(opts...)
 		return c
 	}
 	exs := func(vals ...int) []ExceptionalKiriban {
@@ -97,7 +100,7 @@ func TestChecker_IsKiriban_Option(t *testing.T) {
 		return eks
 	}
 	type input struct {
-		checker *Checker
+		checker *Determinator
 		val     int
 	}
 

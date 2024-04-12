@@ -33,7 +33,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	c, err := kiriban.NewChecker()
+	c, err := kiriban.NewDeterminator()
 	if err != nil {
 		log.Fatalln(err)
 	}
