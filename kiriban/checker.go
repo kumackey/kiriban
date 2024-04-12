@@ -27,10 +27,6 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 		v = -v
 	}
 
-	if v < c.minValue {
-		return nil
-	}
-
 	var kinds []Kind
 
 	if c.isConsecutive(v) {
@@ -64,15 +60,21 @@ func (c *Checker) isConsecutive(v int) bool {
 }
 
 func (c *Checker) isRoundNumber(num int) bool {
-	if num == 0 {
+	str := strconv.Itoa(num)
+	if len(str) == 1 {
+		// 0, 1, 2, ...,9 are not round numbers.
 		return false
 	}
 
-	for num%10 == 0 {
-		num /= 10
-	}
+	zeros := func() int {
+		if c.digitBasedRoundDetermination {
+			return len(str) / 2
+		}
+		return 1
+	}()
 
-	return 0 < num && num < 10
+	last := str[zeros:]
+	return strings.Trim(last, "0") == ""
 }
 
 func (c *Checker) isRepDigit(v int) bool {
@@ -110,13 +112,11 @@ func (c *Checker) Next(v int) int {
 // NewChecker returns a new Checker.
 func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
 	const (
-		defaultMinValue             = 100
 		defaultMinConsecutiveDigits = 3
 	)
 
 	// default options
 	opts := &options{
-		minValue:             defaultMinValue,
 		minConsecutiveDigits: defaultMinConsecutiveDigits,
 	}
 
