@@ -8,20 +8,29 @@ var (
 )
 
 type options struct {
-	minValue            int
-	exceptionalKiribans []ExceptionalKiriban
+	minValue             int
+	exceptionalKiribans  []ExceptionalKiriban
+	minConsecutiveDigits int
 }
 
 // OptionFunc is a function to set options.
 type OptionFunc func(*options) error
 
-// MinValueOption sets the minimum value.
-func MinValueOption(v int) OptionFunc {
+// SetMinValue sets the minimum value.
+func SetMinValue(v int) OptionFunc {
 	return func(o *options) error {
 		if v <= 0 {
 			return ErrorInvalidMinValue
 		}
 		o.minValue = v
+		return nil
+	}
+}
+
+// SetMinConsecutiveDigits sets the minimum consecutive digits.
+func SetMinConsecutiveDigits(v int) OptionFunc {
+	return func(o *options) error {
+		o.minConsecutiveDigits = v
 		return nil
 	}
 }

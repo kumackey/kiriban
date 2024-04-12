@@ -7,8 +7,6 @@ import (
 )
 
 const (
-	minKiribanValue = 100
-
 	zeroToNine = "0123456789"
 	nineToZero = "9876543210"
 )
@@ -56,7 +54,7 @@ func (c *Checker) JudgeKinds(v int) []Kind {
 
 func (c *Checker) isConsecutive(v int) bool {
 	str := strconv.Itoa(v)
-	if len(str) < 3 {
+	if len(str) < c.minConsecutiveDigits {
 		//　If the number is less than three digits,
 		//　it does not appear to be a continuous number and is not determined to be Consecutive.
 		// ex) 1, 12, 32
@@ -111,9 +109,15 @@ func (c *Checker) Next(v int) int {
 
 // NewChecker returns a new Checker.
 func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
+	const (
+		defaultMinValue             = 100
+		defaultMinConsecutiveDigits = 3
+	)
+
 	// default options
 	opts := &options{
-		minValue: minKiribanValue,
+		minValue:             defaultMinValue,
+		minConsecutiveDigits: defaultMinConsecutiveDigits,
 	}
 
 	for _, opt := range optFuncs {

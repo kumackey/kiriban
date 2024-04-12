@@ -12,7 +12,7 @@ func TestOptionFunc(t *testing.T) {
 		in   OptionFunc
 		out  error
 	}{
-		{"min value -50", MinValueOption(-50), ErrorInvalidMinValue},
+		{"min value -50", SetMinValue(-50), ErrorInvalidMinValue},
 	}
 
 	for _, test := range tests {

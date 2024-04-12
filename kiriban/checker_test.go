@@ -104,10 +104,12 @@ func TestChecker_IsKiriban_Option(t *testing.T) {
 		in   input
 		out  bool
 	}{
-		{"50 is kiriban when 50 min", input{nc(MinValueOption(50)), 50}, true},
-		{"50 is not kiriban when 51 min", input{nc(MinValueOption(51)), 50}, false},
-		{"56 is not kiriban when 50 min", input{nc(MinValueOption(50)), 56}, false},
-		{"60 is kiriban when 50 min", input{nc(MinValueOption(50)), 60}, true},
+		{"50 is kiriban when 50 min", input{nc(SetMinValue(50)), 50}, true},
+		{"50 is not kiriban when 51 min", input{nc(SetMinValue(51)), 50}, false},
+		{"56 is not kiriban when 50 min", input{nc(SetMinValue(50)), 56}, false},
+		{"60 is kiriban when 50 min", input{nc(SetMinValue(50)), 60}, true},
+		{"87654 is kiriban when set min consecutive digits to 5", input{nc(SetMinConsecutiveDigits(5)), 87654}, true},
+		{"87654 is not kiriban when set min consecutive digits to 4", input{nc(SetMinConsecutiveDigits(6)), 87654}, false},
 		{"101 is kiriban when set as an exceptional kiriban", input{nc(ExceptionalKiribanOption(exs(101, 103))), 101}, true},
 		{"102 is kiriban when not set as an exceptional kiriban", input{nc(ExceptionalKiribanOption(exs(101, 103))), 102}, false},
 	}
