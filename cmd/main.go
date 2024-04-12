@@ -85,15 +85,15 @@ type eventName int
 const (
 	unknown eventName = iota
 	pullRequest
-	issue
+	issues
 )
 
 func toEventName(s string) (eventName, error) {
 	switch s {
 	case "pull_request":
 		return pullRequest, nil
-	case "issue":
-		return issue, nil
+	case "issues":
+		return issues, nil
 	default:
 		return unknown, fmt.Errorf("invalid event name: %s", s)
 	}
@@ -103,8 +103,8 @@ func (e eventName) String() string {
 	switch e {
 	case pullRequest:
 		return "pull_request"
-	case issue:
-		return "issue"
+	case issues:
+		return "issues"
 	default:
 		return "unknown"
 	}
