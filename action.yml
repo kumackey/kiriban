@@ -1,5 +1,6 @@
 name: 'Kiriban Action'
-description: 'キリ番を判定するGithub Actions'
+description: 'This is a GitHub Actions that will congratulate you when you reach kiriban for your issue or pull
+request number.'
 author: 'kumackey <kumak1t09e0@gmail.com>'
 runs:
   using: 'composite'
