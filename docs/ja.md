@@ -1,7 +1,7 @@
 # kiriban
 
-| [English](docs/en.md) | **日本語** |
-|-----------------------|---------|
+| [English](/docs/en.md) | **日本語** |
+|------------------------|---------|
 
 Issue番号、Pull Request番号でキリ番を引いたら祝ってくれるGitHub Actionsです。<br>
 100以上のIssueやPull Requestからが対象です。<br>
@@ -34,7 +34,7 @@ jobs:
 
 ### なされるコメント
 
-![Actionの結果、コメントされる](img/comment.png)
+![Actionの結果、コメントされる](/img/comment.png)
 
 ## キリ番とは？
 

@@ -1,7 +1,7 @@
 # kiriban
 
-| **English** | [日本語](docs/ja.md) |
-|-------------|-------------------|
+| **English** | [日本語](/docs/ja.md) |
+|-------------|--------------------|
 
 This is a GitHub Actions that will congratulate you when you reach a milestone number (kiriban) for your issue or pull
 request number.
@@ -34,7 +34,7 @@ jobs:
 
 ### The Comment Provided
 
-![The comment posted by the Action](img/comment.png)
+![The comment posted by the Action](/img/comment.png)
 
 ## What is a Kiriban?
 
