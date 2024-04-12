@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"github.com/google/go-github/github"
 	"github.com/kumackey/kiriban/kiriban"
@@ -13,7 +14,21 @@ import (
 )
 
 func main() {
-	prNumber, err := strconv.Atoi(os.Args[1])
+	e := flag.String("e", "", "Event name")
+	flag.Parse()
+
+	en, err := toEventName(*e)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("Event name: %s\n", en.String())
+
+	args := flag.Args()
+	if len(args) != 1 {
+		log.Fatalln("Invalid arguments")
+	}
+
+	issueNumber, err := strconv.Atoi(args[0])
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -23,12 +38,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if !c.IsKiriban(prNumber) {
-		fmt.Printf("#%d is not kiriban.\n", prNumber)
+	if !c.IsKiriban(issueNumber) {
+		fmt.Printf("#%d is not kiriban.\n", issueNumber)
 		os.Exit(0)
 	}
 
-	fmt.Printf("#%d is kiriban!\n", prNumber)
+	fmt.Printf("#%d is kiriban!\n", issueNumber)
 
 	ctx := context.Background()
 
@@ -54,13 +69,43 @@ func main() {
 	owner, repo := parts[0], parts[1]
 
 	comment := &github.IssueComment{Body: github.String(
-		fmt.Sprintf("Congratulations! #%d is kiriban! 🎉", prNumber),
+		fmt.Sprintf("Congratulations! #%d is kiriban! 🎉", issueNumber),
 	)}
 
-	ic, _, err := client.Issues.CreateComment(ctx, owner, repo, prNumber, comment)
+	ic, _, err := client.Issues.CreateComment(ctx, owner, repo, issueNumber, comment)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	fmt.Printf("Commented: %s\n", *ic.HTMLURL)
+}
+
+type eventName int
+
+const (
+	unknown eventName = iota
+	pullRequest
+	issue
+)
+
+func toEventName(s string) (eventName, error) {
+	switch s {
+	case "pull_request":
+		return pullRequest, nil
+	case "issue":
+		return issue, nil
+	default:
+		return unknown, fmt.Errorf("invalid event name: %s", s)
+	}
+}
+
+func (e eventName) String() string {
+	switch e {
+	case pullRequest:
+		return "pull_request"
+	case issue:
+		return "issue"
+	default:
+		return "unknown"
+	}
 }
