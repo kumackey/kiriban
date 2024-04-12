@@ -3,8 +3,8 @@
 | [English](/docs/en.md) | **日本語** |
 |------------------------|---------|
 
-Issue番号、Pull Request番号でキリ番を引いたら祝ってくれるGitHub Actionsです。<br>
-100以上のIssueやPull Requestからが対象です。<br>
+IssueやPull Requestの番号で、キリ番を引いたら祝ってくれるGitHub Actionsです。<br>
+100以上のIssueやPull Requestの番号からが対象です。<br>
 鋭意開発中であり、IssueやPull Requestをお待ちしています！
 
 ## 使い方
