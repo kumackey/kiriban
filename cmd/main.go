@@ -33,7 +33,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	d, err := kiriban.NewDeterminator()
+	d, err := kiriban.NewDeterminator(kiriban.EnableDigitBasedRoundDetermination())
 	if err != nil {
 		log.Fatalln(err)
 	}

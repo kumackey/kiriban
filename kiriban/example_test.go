@@ -34,13 +34,31 @@ func ExampleDeterminator_Next() {
 		{Value: 1101, Reason: "birthday"},
 	}))
 
-	val := 100
+	val := 0
 	for val < 10000 {
-		fmt.Println(val, d.KiribanKinds(val)[0].String())
 		val = d.Next(val)
+		fmt.Println(val, d.KiribanKinds(val)[0].String())
 	}
 
 	// Output:
+	// 10 Round
+	// 11 Repdigit
+	// 20 Round
+	// 22 Repdigit
+	// 30 Round
+	// 33 Repdigit
+	// 40 Round
+	// 44 Repdigit
+	// 50 Round
+	// 55 Repdigit
+	// 60 Round
+	// 66 Repdigit
+	// 70 Round
+	// 77 Repdigit
+	// 80 Round
+	// 88 Repdigit
+	// 90 Round
+	// 99 Repdigit
 	// 100 Round
 	// 111 Repdigit
 	// 123 Consecutive
@@ -106,4 +124,5 @@ func ExampleDeterminator_Next() {
 	// 9000 Round
 	// 9876 Consecutive
 	// 9999 Repdigit
+	// 10000 Round
 }

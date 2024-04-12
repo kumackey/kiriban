@@ -11,6 +11,7 @@ type options struct {
 	exceptionalKiribans          []ExceptionalKiriban
 	minConsecutiveDigits         int
 	digitBasedRoundDetermination bool
+	minRepDigitDigits            int
 }
 
 // OptionFunc is a function to set options.
@@ -28,6 +29,14 @@ func SetMinConsecutiveDigits(v int) OptionFunc {
 func EnableDigitBasedRoundDetermination() OptionFunc {
 	return func(o *options) error {
 		o.digitBasedRoundDetermination = true
+		return nil
+	}
+}
+
+// SetMinRepDigitDigits sets the minimum repdigit digits.
+func SetMinRepDigitDigits(v int) OptionFunc {
+	return func(o *options) error {
+		o.minRepDigitDigits = v
 		return nil
 	}
 }

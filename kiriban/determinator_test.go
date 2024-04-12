@@ -121,6 +121,8 @@ func TestDeterminator_IsKiribanWithOptions(t *testing.T) {
 		{"2300 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 2300}, true},
 		{"23000 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 23000}, true},
 		{"23400 is not kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 23400}, false},
+		{"2222 is kiriban when set min repdigit digits to 4", input{d(SetMinRepDigitDigits(4)), 2222}, true},
+		{"2222 is not kiriban when set min repdigit digits to 5", input{d(SetMinRepDigitDigits(5)), 2222}, false},
 	}
 
 	for _, test := range tests {

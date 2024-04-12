@@ -79,6 +79,10 @@ func (c *Determinator) isRound(num int) bool {
 
 func (c *Determinator) isRepDigit(v int) bool {
 	digits := len(strconv.Itoa(v))
+	if digits < c.minRepDigitDigits {
+		return false
+	}
+
 	for i := 1; i < 10; i++ {
 		if (int(math.Pow10(digits))-1)/9*i == v {
 			return true
@@ -113,11 +117,13 @@ func (c *Determinator) Next(v int) int {
 func NewDeterminator(optFuncs ...OptionFunc) (*Determinator, error) {
 	const (
 		defaultMinConsecutiveDigits = 3
+		defaultMinRepDigitDigits    = 2
 	)
 
 	// default options
 	opts := &options{
 		minConsecutiveDigits: defaultMinConsecutiveDigits,
+		minRepDigitDigits:    defaultMinRepDigitDigits,
 	}
 
 	for _, opt := range optFuncs {
