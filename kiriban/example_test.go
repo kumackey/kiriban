@@ -5,13 +5,13 @@ import (
 	"github.com/kumackey/kiriban/kiriban"
 )
 
-func ExampleDeterminator_IsKiriban() {
-	d, _ := kiriban.NewDeterminator()
+func ExampleChecker_IsKiriban() {
+	c, _ := kiriban.NewChecker()
 
-	v1 := d.IsKiriban(10000)
+	v1 := c.IsKiriban(10000)
 	fmt.Printf("10000 is kiriban? -> %t\n", v1)
 
-	v2 := d.IsKiriban(10001)
+	v2 := c.IsKiriban(10001)
 	fmt.Printf("10001 is kiriban? -> %t\n", v2)
 
 	// Output:
@@ -19,25 +19,24 @@ func ExampleDeterminator_IsKiriban() {
 	// 10001 is kiriban? -> false
 }
 
-func ExampleDeterminator_KiribanKind() {
-	d, _ := kiriban.NewDeterminator()
+func ExampleChecker_KiribanKind() {
+	c, _ := kiriban.NewChecker()
 
-	v3, _ := d.KiribanKind(100000)
+	v3, _ := c.KiribanKind(100000)
 	fmt.Printf("100000 is %s\n", v3)
 	// Output:
 	// 100000 is Round
 }
 
-func ExampleDeterminator_Next() {
-	d, _ := kiriban.NewDeterminator(kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{
-		// Any kiriban can be added.
+func ExampleChecker_Next() {
+	c, _ := kiriban.NewChecker(kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{
 		{Value: 1101, Reason: "birthday"},
 	}))
 
 	val := 0
 	for val < 10000 {
-		val = d.Next(val)
-		kind, _ := d.KiribanKind(val)
+		val = c.Next(val)
+		kind, _ := c.KiribanKind(val)
 		fmt.Println(val, kind.String())
 	}
 

@@ -12,11 +12,11 @@ import (
 
 type issueCommenter struct {
 	client *github.Client
-	kd     *kiriban.Determinator
+	kc     *kiriban.Checker
 }
 
-func newIssueCommenter(client *github.Client, kd *kiriban.Determinator) issueCommenter {
-	return issueCommenter{client: client, kd: kd}
+func newIssueCommenter(client *github.Client, kc *kiriban.Checker) issueCommenter {
+	return issueCommenter{client: client, kc: kc}
 }
 
 func newGithubClient(ctx context.Context, githubToken string) *github.Client {
@@ -47,7 +47,7 @@ func (ic issueCommenter) execute(ctx context.Context, cfg config, v int) (*githu
 // TODO: required to test and refactor
 func (ic issueCommenter) message(ctx context.Context, repository repository, v int, l locale) (string, error) {
 	var msg string
-	next := ic.kd.Next(v)
+	next := ic.kc.Next(v)
 
 	switch l {
 	case localeJa:
@@ -95,7 +95,7 @@ func (ic issueCommenter) calcPreviousKiribans(number, limit int) []int {
 	list := make([]int, 0, limit+2) // +2 is for the current kiriban and the next kiriban
 
 	for limit > 0 {
-		num, err := ic.kd.Previous(number)
+		num, err := ic.kc.Previous(number)
 		if errors.Is(err, kiriban.ErrorNoPreviousKiriban) {
 			break
 		}

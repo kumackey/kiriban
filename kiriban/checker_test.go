@@ -30,10 +30,10 @@ func TestDeterminator_IsKiriban(t *testing.T) {
 		{"-123 is kiriban", -123, true},
 	}
 
-	d, _ := NewDeterminator()
+	c, _ := NewChecker()
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			assert.Equal(t, test.out, d.IsKiriban(test.in))
+			assert.Equal(t, test.out, c.IsKiriban(test.in))
 		})
 	}
 }
@@ -55,10 +55,10 @@ func TestDeterminator_KiribanKinds(t *testing.T) {
 		{110, nil, false},
 	}
 
-	d, _ := NewDeterminator()
+	c, _ := NewChecker()
 	for _, test := range tests {
 		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
-			kind, ok := d.KiribanKind(test.in)
+			kind, ok := c.KiribanKind(test.in)
 			assert.Equal(t, test.kind, kind)
 			assert.Equal(t, test.isKiriban, ok)
 		})
@@ -81,11 +81,11 @@ func TestDeterminator_Next(t *testing.T) {
 		{123456789, 200000000}, // too late...
 	}
 
-	d, _ := NewDeterminator()
+	c, _ := NewChecker()
 	for _, test := range tests {
 		t.Run(strconv.Itoa(test.in)+"->"+strconv.Itoa(test.out), func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, test.out, d.Next(test.in))
+			assert.Equal(t, test.out, c.Next(test.in))
 		})
 	}
 }
@@ -111,12 +111,12 @@ func TestDeterminator_Previous(t *testing.T) {
 		{200000000, out{123456789, nil}}, // too late...
 	}
 
-	d, _ := NewDeterminator()
+	c, _ := NewChecker()
 	for _, test := range tests {
 		name := strconv.Itoa(test.in) + "->" + strconv.Itoa(test.out.prev)
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			prev, err := d.Previous(test.in)
+			prev, err := c.Previous(test.in)
 			assert.ErrorIs(t, err, test.out.err)
 			assert.Equal(t, test.out.prev, prev)
 		})
@@ -124,9 +124,9 @@ func TestDeterminator_Previous(t *testing.T) {
 }
 
 func TestDeterminator_IsKiribanWithOptions(t *testing.T) {
-	d := func(opts ...OptionFunc) *Determinator {
-		d, _ := NewDeterminator(opts...)
-		return d
+	c := func(opts ...OptionFunc) *Checker {
+		c, _ := NewChecker(opts...)
+		return c
 	}
 	exs := func(vals ...int) []ExceptionalKiriban {
 		eks := make([]ExceptionalKiriban, 0, len(vals))
@@ -136,7 +136,7 @@ func TestDeterminator_IsKiribanWithOptions(t *testing.T) {
 		return eks
 	}
 	type input struct {
-		determinator *Determinator
+		determinator *Checker
 		val          int
 	}
 
@@ -145,20 +145,20 @@ func TestDeterminator_IsKiribanWithOptions(t *testing.T) {
 		in   input
 		out  bool
 	}{
-		{"87654 is kiriban when set min consecutive digits to 5", input{d(SetMinConsecutiveDigits(5)), 87654}, true},
-		{"87654 is not kiriban when set min consecutive digits to 4", input{d(SetMinConsecutiveDigits(6)), 87654}, false},
-		{"101 is kiriban when set as an exceptional kiriban", input{d(ExceptionalKiribanOption(exs(101, 103))), 101}, true},
-		{"102 is kiriban when not set as an exceptional kiriban", input{d(ExceptionalKiribanOption(exs(101, 103))), 102}, false},
-		{"0 is not kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 0}, false},
-		{"20 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 20}, true},
-		{"200 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 200}, true},
-		{"230 is not kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 230}, false},
-		{"2000 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 2000}, true},
-		{"2300 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 2300}, true},
-		{"23000 is kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 23000}, true},
-		{"23400 is not kiriban when enabled digit-based round determination", input{d(EnableDigitBasedRoundDetermination()), 23400}, false},
-		{"2222 is kiriban when set min repdigit digits to 4", input{d(SetMinRepDigitDigits(4)), 2222}, true},
-		{"2222 is not kiriban when set min repdigit digits to 5", input{d(SetMinRepDigitDigits(5)), 2222}, false},
+		{"87654 is kiriban when set min consecutive digits to 5", input{c(SetMinConsecutiveDigits(5)), 87654}, true},
+		{"87654 is not kiriban when set min consecutive digits to 4", input{c(SetMinConsecutiveDigits(6)), 87654}, false},
+		{"101 is kiriban when set as an exceptional kiriban", input{c(ExceptionalKiribanOption(exs(101, 103))), 101}, true},
+		{"102 is kiriban when not set as an exceptional kiriban", input{c(ExceptionalKiribanOption(exs(101, 103))), 102}, false},
+		{"0 is not kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 0}, false},
+		{"20 is kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 20}, true},
+		{"200 is kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 200}, true},
+		{"230 is not kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 230}, false},
+		{"2000 is kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 2000}, true},
+		{"2300 is kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 2300}, true},
+		{"23000 is kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 23000}, true},
+		{"23400 is not kiriban when enabled digit-based round determination", input{c(EnableDigitBasedRoundDetermination()), 23400}, false},
+		{"2222 is kiriban when set min repdigit digits to 4", input{c(SetMinRepDigitDigits(4)), 2222}, true},
+		{"2222 is not kiriban when set min repdigit digits to 5", input{c(SetMinRepDigitDigits(5)), 2222}, false},
 	}
 
 	for _, test := range tests {
