@@ -130,13 +130,12 @@ func calcPreviousKiribans(d *kiriban.Determinator, number, limit int) []int {
 	list := make([]int, 0, limit+2) // +2 is for the current kiriban and the next kiriban
 
 	for limit > 0 {
-		num, err := d.Previous(number)
+		number, err := d.Previous(number)
 		if errors.Is(err, kiriban.ErrorNoPreviousKiriban) {
 			break
 		}
-		list = append([]int{num}, list...)
+		list = append([]int{number}, list...)
 		limit--
-
 	}
 
 	return list
@@ -153,7 +152,7 @@ func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo str
 			return nil, err
 		}
 
-		users[number] = "@" + issue.GetUser().GetLogin()
+		users[number] = issue.GetUser().GetLogin()
 	}
 
 	return users, nil
