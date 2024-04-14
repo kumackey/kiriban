@@ -87,6 +87,37 @@ func TestDeterminator_Next(t *testing.T) {
 	}
 }
 
+func TestDeterminator_Previous(t *testing.T) {
+	type out struct {
+		prev int
+		err  error
+	}
+	tests := []struct {
+		in  int
+		out out
+	}{
+		{100, out{99, nil}},
+		{101, out{100, nil}},
+		{102, out{100, nil}},
+		{123, out{111, nil}},
+		{200, out{123, nil}},
+		{10, out{0, ErrorNoPreviousKiriban}},
+		{0, out{0, ErrorNoPreviousKiriban}},
+		{200000000, out{123456789, nil}}, // too late...
+	}
+
+	d, _ := NewDeterminator()
+	for _, test := range tests {
+		name := strconv.Itoa(test.in) + "->" + strconv.Itoa(test.out.prev)
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			prev, err := d.Previous(test.in)
+			assert.ErrorIs(t, err, test.out.err)
+			assert.Equal(t, test.out.prev, prev)
+		})
+	}
+}
+
 func TestDeterminator_IsKiribanWithOptions(t *testing.T) {
 	d := func(opts ...OptionFunc) *Determinator {
 		d, _ := NewDeterminator(opts...)

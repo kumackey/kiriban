@@ -113,6 +113,22 @@ func (c *Determinator) Next(v int) int {
 	}
 }
 
+var ErrorNoPreviousKiriban = errors.New("no previous kiriban")
+
+// Previous returns the previous kiriban value.
+func (c *Determinator) Previous(v int) (int, error) {
+	for {
+		if v == 0 {
+			return 0, ErrorNoPreviousKiriban
+		}
+
+		v--
+		if c.IsKiriban(v) {
+			return v, nil
+		}
+	}
+}
+
 // NewDeterminator returns a new Determinator.
 func NewDeterminator(optFuncs ...OptionFunc) (*Determinator, error) {
 	const (
