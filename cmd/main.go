@@ -146,6 +146,7 @@ func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo str
 	users := make([]string, 0, len(numbers))
 
 	for _, number := range numbers {
+		// TODO: N+1 problem
 		issue, _, err := client.Issues.Get(ctx, owner, repo, number)
 		if err != nil {
 			// TODO: Handle error
@@ -170,7 +171,7 @@ func toEventName(s string) (eventName, error) {
 	switch s {
 	case "pull_request":
 		return eventNamePullRequest, nil
-	case "eventNameIssues":
+	case "issues":
 		return eventNameIssues, nil
 	default:
 		return eventNameUnknown, fmt.Errorf("invalid event name: %s", s)
@@ -182,9 +183,9 @@ func (e eventName) String() string {
 	case eventNamePullRequest:
 		return "pull_request"
 	case eventNameIssues:
-		return "eventNameIssues"
+		return "issues"
 	default:
-		return "eventNameUnknown"
+		return "unknown"
 	}
 }
 
