@@ -130,11 +130,12 @@ func calcPreviousKiribans(d *kiriban.Determinator, number, limit int) []int {
 	list := make([]int, 0, limit+2) // +2 is for the current kiriban and the next kiriban
 
 	for limit > 0 {
-		number, err := d.Previous(number)
+		num, err := d.Previous(number)
 		if errors.Is(err, kiriban.ErrorNoPreviousKiriban) {
 			break
 		}
-		list = append([]int{number}, list...)
+		list = append([]int{num}, list...)
+		number = num
 		limit--
 	}
 
