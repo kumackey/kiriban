@@ -1,4 +1,4 @@
-package main
+package domain
 
 import (
 	"context"
@@ -15,8 +15,8 @@ type IssueCommenter struct {
 }
 
 type GitHubClient interface {
-	CreateIssueComment(context.Context, repository, int, string) (string, error)
-	GetIssueUsers(context.Context, repository, []int) (map[int]string, error)
+	CreateIssueComment(context.Context, Repository, int, string) (string, error)
+	GetIssueUsers(context.Context, Repository, []int) (map[int]string, error)
 }
 
 func NewIssueCommenter(client GitHubClient, kc *kiriban.Checker) IssueCommenter {
@@ -24,23 +24,23 @@ func NewIssueCommenter(client GitHubClient, kc *kiriban.Checker) IssueCommenter 
 }
 
 // TODO: test
-func (ic IssueCommenter) Execute(ctx context.Context, cfg config, v int) (string, error) {
-	msg, err := ic.message(ctx, cfg.repository, v, cfg.locale)
+func (ic IssueCommenter) Execute(ctx context.Context, v int, repo Repository, locale Locale) (string, error) {
+	msg, err := ic.message(ctx, repo, v, locale)
 	if err != nil {
 		return "", err
 	}
 
-	return ic.client.CreateIssueComment(ctx, cfg.repository, v, msg)
+	return ic.client.CreateIssueComment(ctx, repo, v, msg)
 }
 
-func (ic IssueCommenter) message(ctx context.Context, repository repository, v int, l locale) (string, error) {
+func (ic IssueCommenter) message(ctx context.Context, repository Repository, v int, l Locale) (string, error) {
 	var msg string
 	next := ic.kc.Next(v)
 
 	switch l {
-	case localeJa:
+	case LocaleJa:
 		msg = fmt.Sprintf("おめでとうございます！🎉 #%d はキリ番です！\n次のキリ番は #%d です。踏み逃げは厳禁ですよ！\n", v, next)
-	case localeEn:
+	case LocaleEn:
 		msg = fmt.Sprintf("Congratulations!🎉 #%d is kiriban!\nNext kiriban is #%d. But fleeing after stepping on kiriban is strictly forbidden, you know!\n", v, next)
 	default:
 		return "", fmt.Errorf("unsupported locale: %s", l.String())
@@ -55,9 +55,9 @@ func (ic IssueCommenter) message(ctx context.Context, repository repository, v i
 	}
 
 	switch l {
-	case localeJa:
+	case LocaleJa:
 		msg += "\n| キリ番 | アカウント |\n| --- | --- |\n"
-	case localeEn:
+	case LocaleEn:
 		msg += "\n| kiriban | account |\n| --- | --- |\n"
 	default:
 		return "", fmt.Errorf("unsupported locale: %s", l.String())
@@ -68,9 +68,9 @@ func (ic IssueCommenter) message(ctx context.Context, repository repository, v i
 	}
 
 	switch l {
-	case localeJa:
+	case LocaleJa:
 		msg += fmt.Sprintf("| #%d | まもなく…… |\n", next)
-	case localeEn:
+	case LocaleEn:
 		msg += fmt.Sprintf("| #%d | Comming Soon... |\n", next)
 	default:
 		return "", fmt.Errorf("unsupported locale: %s", l.String())

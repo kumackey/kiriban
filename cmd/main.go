@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/google/go-github/github"
+	"github.com/kumackey/kiriban/internal/domain"
 	"github.com/kumackey/kiriban/kiriban"
 	"golang.org/x/oauth2"
 	"log"
@@ -23,7 +24,7 @@ func main() {
 	udks := flag.String("u", "", "User-defined kiribans")
 	flag.Parse()
 
-	_, err = toEventName(*t)
+	_, err = domain.ToEventName(*t)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -43,7 +44,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	c, err := kiriban.NewChecker(kiriban.EnableDigitBasedRoundDetermination(), kiriban.ExceptionalKiribanOption(eks))
+	c, err := kiriban.NewChecker(
+		kiriban.EnableDigitBasedRoundDetermination(),
+		kiriban.ExceptionalKiribanOption(eks),
+	)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -57,8 +61,8 @@ func main() {
 
 	ctx := context.Background()
 
-	ic := NewIssueCommenter(newGithubClient(ctx, cfg.githubToken), c)
-	url, err := ic.Execute(ctx, cfg, issueNumber)
+	ic := domain.NewIssueCommenter(newGithubClient(ctx, cfg.githubToken), c)
+	url, err := ic.Execute(ctx, issueNumber, cfg.repository, cfg.locale)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -101,9 +105,9 @@ func newGithubClient(ctx context.Context, githubToken string) *githubClientImpl 
 	return &githubClientImpl{client: client}
 }
 
-func (g *githubClientImpl) CreateIssueComment(ctx context.Context, repository repository, number int, comment string) (string, error) {
+func (g *githubClientImpl) CreateIssueComment(ctx context.Context, repository domain.Repository, number int, comment string) (string, error) {
 	c := &github.IssueComment{Body: &comment}
-	issueComment, _, err := g.client.Issues.CreateComment(ctx, repository.owner, repository.repo, number, c)
+	issueComment, _, err := g.client.Issues.CreateComment(ctx, repository.Owner, repository.Repo, number, c)
 	if err != nil {
 		return "", err
 	}
@@ -111,11 +115,11 @@ func (g *githubClientImpl) CreateIssueComment(ctx context.Context, repository re
 	return issueComment.GetHTMLURL(), nil
 }
 
-func (g *githubClientImpl) GetIssueUsers(ctx context.Context, repository repository, numbers []int) (map[int]string, error) {
+func (g *githubClientImpl) GetIssueUsers(ctx context.Context, repository domain.Repository, numbers []int) (map[int]string, error) {
 	users := make(map[int]string, len(numbers))
 	for _, number := range numbers {
 		// TODO: N+1 problem
-		issue, _, err := g.client.Issues.Get(ctx, repository.owner, repository.repo, number)
+		issue, _, err := g.client.Issues.Get(ctx, repository.Owner, repository.Repo, number)
 		if err != nil {
 			return nil, err
 		}
