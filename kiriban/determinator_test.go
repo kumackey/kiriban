@@ -40,24 +40,27 @@ func TestDeterminator_IsKiriban(t *testing.T) {
 
 func TestDeterminator_KiribanKinds(t *testing.T) {
 	tests := []struct {
-		in  int
-		out []Kind
+		in        int
+		kind      Kind
+		isKiriban bool
 	}{
-		{100, []Kind{KindRound{}}},
-		{2000, []Kind{KindRound{}}},
-		{110000000, nil},
-		{101, nil},
-		{123, []Kind{KindConsecutive{}}},
-		{124, nil},
-		{321, []Kind{KindConsecutive{}}},
-		{111, []Kind{KindRepdigit{}}},
-		{110, nil},
+		{100, KindRound{}, true},
+		{2000, KindRound{}, true},
+		{110000000, nil, false},
+		{101, nil, false},
+		{123, KindConsecutive{}, true},
+		{124, nil, false},
+		{321, KindConsecutive{}, true},
+		{111, KindRepdigit{}, true},
+		{110, nil, false},
 	}
 
 	d, _ := NewDeterminator()
 	for _, test := range tests {
 		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
-			assert.Equal(t, test.out, d.KiribanKinds(test.in))
+			kind, ok := d.KiribanKind(test.in)
+			assert.Equal(t, test.kind, kind)
+			assert.Equal(t, test.isKiriban, ok)
 		})
 	}
 }
@@ -80,7 +83,7 @@ func TestDeterminator_Next(t *testing.T) {
 
 	d, _ := NewDeterminator()
 	for _, test := range tests {
-		t.Run(strconv.Itoa(test.in), func(t *testing.T) {
+		t.Run(strconv.Itoa(test.in)+"->"+strconv.Itoa(test.out), func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, test.out, d.Next(test.in))
 		})
@@ -88,6 +91,8 @@ func TestDeterminator_Next(t *testing.T) {
 }
 
 func TestDeterminator_Previous(t *testing.T) {
+	t.Parallel()
+
 	type out struct {
 		prev int
 		err  error

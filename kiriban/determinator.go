@@ -18,35 +18,34 @@ type Determinator struct {
 
 // IsKiriban returns true if the given value is kiriban.
 func (c *Determinator) IsKiriban(v int) bool {
-	return 0 < len(c.KiribanKinds(v))
+	_, ok := c.KiribanKind(v)
+	return ok
 }
 
-// KiribanKinds returns kiriban kinds of the given value.
-func (c *Determinator) KiribanKinds(v int) []Kind {
+// KiribanKind returns kiriban kind of the given value.
+func (c *Determinator) KiribanKind(v int) (Kind, bool) {
 	if v < 0 {
 		// If the value is negative, convert it to a positive value.
 		v = -v
 	}
 
-	var kinds []Kind
+	if ok, ex := isExceptionalKiriban(v, c.exceptionalKiribans); ok {
+		return KindExceptionalKiriban{ex}, true
+	}
 
 	if c.isConsecutive(v) {
-		kinds = append(kinds, KindConsecutive{})
+		return KindConsecutive{}, true
 	}
 
 	if c.isRound(v) {
-		kinds = append(kinds, KindRound{})
+		return KindRound{}, true
 	}
 
 	if c.isRepDigit(v) {
-		kinds = append(kinds, KindRepdigit{})
+		return KindRepdigit{}, true
 	}
 
-	if ok, ex := isExceptionalKiriban(v, c.exceptionalKiribans); ok {
-		kinds = append(kinds, KindExceptionalKiriban{ex})
-	}
-
-	return kinds
+	return nil, false
 }
 
 func (c *Determinator) isConsecutive(v int) bool {
