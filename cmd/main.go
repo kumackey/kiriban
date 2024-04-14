@@ -102,7 +102,7 @@ func message(ctx context.Context, client *github.Client, d *kiriban.Determinator
 	case localeJa:
 		msg = fmt.Sprintf("おめでとうございます！🎉 #%d はキリ番です！\n次のキリ番は #%d です。踏み逃げは厳禁ですよ！\n", v, next)
 	case localeEn:
-		msg = fmt.Sprintf("Congratulations!🎉 #%d is kiriban!\nNext kiriban is #%d . But fleeing after stepping on kiriban is strictly forbidden, you know!\n", v, next)
+		msg = fmt.Sprintf("Congratulations!🎉 #%d is kiriban!\nNext kiriban is #%d. But fleeing after stepping on kiriban is strictly forbidden, you know!\n", v, next)
 	default:
 		return "", fmt.Errorf("unsupported locale: %s", l.String())
 	}
@@ -121,7 +121,7 @@ func message(ctx context.Context, client *github.Client, d *kiriban.Determinator
 		msg += fmt.Sprintf("| #%d | @%s |\n", l, users[l])
 	}
 
-	msg += fmt.Sprintf("| #%d | Comming Soon |\n", next)
+	msg += fmt.Sprintf("| #%d | Comming Soon... |\n", next)
 
 	return msg, nil
 }
