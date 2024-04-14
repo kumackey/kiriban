@@ -17,9 +17,9 @@ jobs:
       - uses: kumackey/kiriban@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USER_DEFINED_KIRIBANS: '45, 46,47'
       - uses: kumackey/kiriban@main
         with:
           LOCALE: 'ja'
-          USER_DEFINED_KIRIBANS: '45, 46,47'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
