@@ -19,11 +19,11 @@ func ExampleDeterminator_IsKiriban() {
 	// 10001 is kiriban? -> false
 }
 
-func ExampleDeterminator_KiribanKinds() {
+func ExampleDeterminator_KiribanKind() {
 	d, _ := kiriban.NewDeterminator()
 
-	v3 := d.KiribanKinds(100000)
-	fmt.Printf("100000 is %s\n", v3[0])
+	v3, _ := d.KiribanKind(100000)
+	fmt.Printf("100000 is %s\n", v3)
 	// Output:
 	// 100000 is Round
 }
@@ -37,7 +37,8 @@ func ExampleDeterminator_Next() {
 	val := 0
 	for val < 10000 {
 		val = d.Next(val)
-		fmt.Println(val, d.KiribanKinds(val)[0].String())
+		kind, _ := d.KiribanKind(val)
+		fmt.Println(val, kind.String())
 	}
 
 	// Output:
