@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/google/go-github/github"
@@ -78,7 +79,10 @@ func main() {
 
 	owner, repo := parts[0], parts[1]
 
-	msg := message(issueNumber, d.Next(issueNumber), lcl)
+	msg, err := message(ctx, client, d, owner, repo, issueNumber, lcl)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	comment := &github.IssueComment{Body: github.String(msg)}
 
 	ic, _, err := client.Issues.CreateComment(ctx, owner, repo, issueNumber, comment)
@@ -89,13 +93,69 @@ func main() {
 	fmt.Printf("Commented: %s\n", *ic.HTMLURL)
 }
 
-func message(v, next int, l locale) string {
+// TODO: required to test and refactor
+func message(ctx context.Context, client *github.Client, d *kiriban.Determinator, owner, repo string, v int, l locale) (string, error) {
+	var msg string
+	next := d.Next(v)
+
 	switch l {
 	case localeJa:
-		return fmt.Sprintf("おめでとうございます！🎉 #%d はキリ番です！\n次のキリ番は #%d です。踏み逃げは厳禁ですよ！\n", v, next)
+		msg = fmt.Sprintf("おめでとうございます！🎉 #%d はキリ番です！\n次のキリ番は #%d です。踏み逃げは厳禁ですよ！\n", v, next)
+	case localeEn:
+		msg = fmt.Sprintf("Congratulations!🎉 #%d is kiriban!\nNext kiriban is #%d . But fleeing after stepping on kiriban is strictly forbidden, you know!\n", v, next)
 	default:
-		return fmt.Sprintf("Congratulations!🎉 #%d is kiriban!\nNext kiriban is #%d . But fleeing after stepping on kiriban is strictly forbidden, you know!\n", v, next)
+		return "", fmt.Errorf("unsupported locale: %s", l.String())
 	}
+
+	list := calcPreviousKiribans(d, v, 8)
+	list = append(list, v)
+
+	users, err := fetchIssueUsers(ctx, client, owner, repo, list)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	msg += "\n| kiriban | account |\n| --- | --- |\n"
+
+	for _, l := range list {
+		msg += fmt.Sprintf("| #%d | @%s |\n", l, users[l])
+	}
+
+	msg += fmt.Sprintf("| #%d | Comming Soon |\n", next)
+
+	return msg, nil
+}
+
+func calcPreviousKiribans(d *kiriban.Determinator, number, limit int) []int {
+	list := make([]int, 0, limit+2) // +2 is for the current kiriban and the next kiriban
+
+	for limit > 0 {
+		num, err := d.Previous(number)
+		if errors.Is(err, kiriban.ErrorNoPreviousKiriban) {
+			break
+		}
+		list = append([]int{num}, list...)
+		limit--
+
+	}
+
+	return list
+}
+
+func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo string, numbers []int) ([]string, error) {
+	users := make([]string, 0, len(numbers))
+
+	for _, number := range numbers {
+		issue, _, err := client.Issues.Get(ctx, owner, repo, number)
+		if err != nil {
+			// TODO: Handle error
+			return nil, err
+		}
+
+		users = append(users, issue.User.GetLogin())
+	}
+
+	return users, nil
 }
 
 type eventName int
