@@ -20,5 +20,6 @@ jobs:
       - uses: kumackey/kiriban@main
         with:
           LOCALE: 'ja'
+          EXCEPTIONAL_NUMBERS: '45, 46,47'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
