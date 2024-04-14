@@ -115,13 +115,27 @@ func message(ctx context.Context, client *github.Client, d *kiriban.Determinator
 		log.Fatalln(err)
 	}
 
-	msg += "\n| kiriban | account |\n| --- | --- |\n"
+	switch l {
+	case localeJa:
+		msg += "\n| キリ番 | アカウント |\n| --- | --- |\n"
+	case localeEn:
+		msg += "\n| kiriban | account |\n| --- | --- |\n"
+	default:
+		return "", fmt.Errorf("unsupported locale: %s", l.String())
+	}
 
 	for _, l := range list {
 		msg += fmt.Sprintf("| #%d | @%s |\n", l, users[l])
 	}
 
-	msg += fmt.Sprintf("| #%d | Comming Soon... |\n", next)
+	switch l {
+	case localeJa:
+		msg += fmt.Sprintf("| #%d | まもなく…… |\n", next)
+	case localeEn:
+		msg += fmt.Sprintf("| #%d | Comming Soon... |\n", next)
+	default:
+		return "", fmt.Errorf("unsupported locale: %s", l.String())
+	}
 
 	return msg, nil
 }
