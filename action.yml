@@ -7,6 +7,10 @@ inputs:
     description: 'Locale'
     required: false
     default: 'en'
+  USER_DEFINED_KIRIBANS:
+    description: 'User-defined kiribans'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -19,7 +23,11 @@ runs:
           echo "Unsupported event name: ${{ github.event_name }}"
           exit 1
         fi
-        go run cmd/*.go -e ${{ github.event_name }} $NUMBER
+        if [[ -n "${{ inputs.USER_DEFINED_KIRIBANS }}" ]]; then
+          go run cmd/*.go -t ${{ github.event_name }} -u "${{ inputs.USER_DEFINED_KIRIBANS }}" $NUMBER
+        else
+          go run cmd/*.go -t ${{ github.event_name }} $NUMBER
+        fi
       shell: bash
       working-directory: ${{ github.action_path }}
       env:

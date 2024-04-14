@@ -38,6 +38,13 @@ jobs:
 
 ![Actionの結果、コメントされる](/img/comment_ja.png)
 
+### withのオプション
+
+| キー名                   | 説明              | 例          |
+|-----------------------|-----------------|------------|
+| LOCALE                | 言語設定（デフォルトではen） | 'ja'       |
+| USER_DEFINED_KIRIBANS | ユーザ定義で祝う番号      | '101,4649' |
+
 ## キリ番とは？
 
 [https://ja.wikipedia.org/wiki/キリバン](https://ja.wikipedia.org/wiki/%E3%82%AD%E3%83%AA%E3%83%90%E3%83%B3)

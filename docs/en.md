@@ -36,6 +36,13 @@ jobs:
 
 ![The comment posted by the Action](/img/comment_en.png)
 
+### with Options
+
+| Key Name              | Description                        | Example    |
+|-----------------------|------------------------------------|------------|
+| LOCALE                | Language setting (default is 'en') | 'ja'       |
+| USER_DEFINED_KIRIBANS | User-defined numbers to celebrate  | '101,4649' |
+
 ## What is a Kiriban?
 
 https://fanlore.org/wiki/Kiriban

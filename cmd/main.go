@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -16,10 +17,16 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	e := flag.String("e", "", "Event name")
+	t := flag.String("t", "", "Event name")
+	udks := flag.String("u", "", "User-defined kiribans")
 	flag.Parse()
 
-	_, err = toEventName(*e)
+	_, err = toEventName(*t)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	eks, err := toExceptionalKiribans(*udks)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -34,7 +41,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	d, err := kiriban.NewDeterminator(kiriban.EnableDigitBasedRoundDetermination())
+	d, err := kiriban.NewDeterminator(kiriban.EnableDigitBasedRoundDetermination(), kiriban.ExceptionalKiribanOption(eks))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -55,4 +62,25 @@ func main() {
 	}
 
 	fmt.Printf("Commented: %s\n", comment.GetHTMLURL())
+}
+
+func toExceptionalKiribans(e string) ([]kiriban.ExceptionalKiriban, error) {
+	if e == "" {
+		return nil, nil
+	}
+
+	e = strings.ReplaceAll(e, " ", "")
+	parts := strings.Split(e, ",")
+	kiribans := make([]kiriban.ExceptionalKiriban, 0, len(parts))
+
+	for _, part := range parts {
+		value, err := strconv.Atoi(part)
+		if err != nil {
+			return nil, fmt.Errorf("invalid exceptional kiriban value: %v", err)
+		}
+
+		kiribans = append(kiribans, kiriban.ExceptionalKiriban{Value: value})
+	}
+
+	return kiribans, nil
 }
