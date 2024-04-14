@@ -66,11 +66,20 @@ func main() {
 	if len(parts) != 2 {
 		log.Fatalf("Invalid GITHUB_REPOSITORY: %s\n", repository)
 	}
+
+	loc, ok := os.LookupEnv("LOCALE")
+	if !ok {
+		loc = localeEn.String()
+	}
+	lcl, err := toLocale(loc)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	owner, repo := parts[0], parts[1]
 
-	comment := &github.IssueComment{Body: github.String(
-		fmt.Sprintf("Congratulations! #%d is kiriban! 🎉\nNext kiriban is #%d .\n", issueNumber, d.Next(issueNumber)),
-	)}
+	msg := message(issueNumber, d.Next(issueNumber), lcl)
+	comment := &github.IssueComment{Body: github.String(msg)}
 
 	ic, _, err := client.Issues.CreateComment(ctx, owner, repo, issueNumber, comment)
 	if err != nil {
@@ -80,31 +89,70 @@ func main() {
 	fmt.Printf("Commented: %s\n", *ic.HTMLURL)
 }
 
+func message(v, next int, l locale) string {
+	switch l {
+	case localeJa:
+		return fmt.Sprintf("おめでとうございます！🎉 #%d はキリ番です！\n次のキリ番は #%d です。踏み逃げは厳禁ですよ！\n", v, next)
+	default:
+		return fmt.Sprintf("Congratulations!🎉 #%d is kiriban!\nNext kiriban is #%d . But fleeing after stepping on kiriban is strictly forbidden, you know!\n", v, next)
+	}
+}
+
 type eventName int
 
 const (
-	unknown eventName = iota
-	pullRequest
-	issues
+	eventNameUnknown eventName = iota
+	eventNamePullRequest
+	eventNameIssues
 )
 
 func toEventName(s string) (eventName, error) {
 	switch s {
 	case "pull_request":
-		return pullRequest, nil
-	case "issues":
-		return issues, nil
+		return eventNamePullRequest, nil
+	case "eventNameIssues":
+		return eventNameIssues, nil
 	default:
-		return unknown, fmt.Errorf("invalid event name: %s", s)
+		return eventNameUnknown, fmt.Errorf("invalid event name: %s", s)
 	}
 }
 
 func (e eventName) String() string {
 	switch e {
-	case pullRequest:
+	case eventNamePullRequest:
 		return "pull_request"
-	case issues:
-		return "issues"
+	case eventNameIssues:
+		return "eventNameIssues"
+	default:
+		return "eventNameUnknown"
+	}
+}
+
+type locale int
+
+const (
+	localeUnknown locale = iota
+	localeJa
+	localeEn
+)
+
+func toLocale(s string) (locale, error) {
+	switch s {
+	case "ja":
+		return localeJa, nil
+	case "en":
+		return localeEn, nil
+	default:
+		return localeUnknown, fmt.Errorf("invalid locale: %s", s)
+	}
+}
+
+func (l locale) String() string {
+	switch l {
+	case localeJa:
+		return "ja"
+	case localeEn:
+		return "en"
 	default:
 		return "unknown"
 	}

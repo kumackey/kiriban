@@ -2,6 +2,11 @@ name: 'Kiriban Action'
 description: 'This is a GitHub Actions that will congratulate you when you reach kiriban for your issue or pull
 request number.'
 author: 'kumackey <kumak1t09e0@gmail.com>'
+inputs:
+  LOCALE:
+    description: 'Locale'
+    required: false
+    default: 'en'
 runs:
   using: 'composite'
   steps:
@@ -20,6 +25,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
         GITHUB_REPOSITORY: ${{ github.repository }}
+        LOCALE: ${{ inputs.LOCALE }}
 branding:
   icon: 'gift'
   color: 'orange'
