@@ -153,7 +153,7 @@ func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo str
 			return nil, err
 		}
 
-		users[number] = issue.GetUser().GetLogin()
+		users[number] = "@" + issue.GetUser().GetLogin()
 	}
 
 	return users, nil
