@@ -12,10 +12,10 @@ import (
 
 type issueCommenter struct {
 	client *github.Client
-	kd     *kiriban.Determinator
+	kd     *kiriban.Checker
 }
 
-func newIssueCommenter(client *github.Client, kd *kiriban.Determinator) issueCommenter {
+func newIssueCommenter(client *github.Client, kd *kiriban.Checker) issueCommenter {
 	return issueCommenter{client: client, kd: kd}
 }
 

@@ -12,18 +12,18 @@ const (
 	nineToZero = "9876543210"
 )
 
-type Determinator struct {
+type Checker struct {
 	*options
 }
 
 // IsKiriban returns true if the given value is kiriban.
-func (c *Determinator) IsKiriban(v int) bool {
+func (c *Checker) IsKiriban(v int) bool {
 	_, ok := c.KiribanKind(v)
 	return ok
 }
 
 // KiribanKind returns kiriban kind of the given value.
-func (c *Determinator) KiribanKind(v int) (Kind, bool) {
+func (c *Checker) KiribanKind(v int) (Kind, bool) {
 	if v < 0 {
 		// If the value is negative, convert it to a positive value.
 		v = -v
@@ -48,7 +48,7 @@ func (c *Determinator) KiribanKind(v int) (Kind, bool) {
 	return nil, false
 }
 
-func (c *Determinator) isConsecutive(v int) bool {
+func (c *Checker) isConsecutive(v int) bool {
 	str := strconv.Itoa(v)
 	if len(str) < c.minConsecutiveDigits {
 		//　If the number is less than three digits,
@@ -59,7 +59,7 @@ func (c *Determinator) isConsecutive(v int) bool {
 	return strings.Contains(zeroToNine, str) || strings.Contains(nineToZero, str)
 }
 
-func (c *Determinator) isRound(num int) bool {
+func (c *Checker) isRound(num int) bool {
 	str := strconv.Itoa(num)
 	if len(str) == 1 {
 		// 0, 1, 2, ...,9 are not round numbers.
@@ -77,7 +77,7 @@ func (c *Determinator) isRound(num int) bool {
 	return strings.Trim(last, "0") == ""
 }
 
-func (c *Determinator) isRepDigit(v int) bool {
+func (c *Checker) isRepDigit(v int) bool {
 	digits := len(strconv.Itoa(v))
 	if digits < c.minRepDigitDigits {
 		return false
@@ -103,7 +103,7 @@ func isExceptionalKiriban(v int, exs []ExceptionalKiriban) (bool, *ExceptionalKi
 }
 
 // Next returns the next kiriban value.
-func (c *Determinator) Next(v int) int {
+func (c *Checker) Next(v int) int {
 	// TODO: It takes a long time when the next number is too far away.
 	for {
 		v++
@@ -116,7 +116,7 @@ func (c *Determinator) Next(v int) int {
 var ErrorNoPreviousKiriban = errors.New("no previous kiriban")
 
 // Previous returns the previous kiriban value.
-func (c *Determinator) Previous(v int) (int, error) {
+func (c *Checker) Previous(v int) (int, error) {
 	for {
 		if v == 0 {
 			return 0, ErrorNoPreviousKiriban
@@ -129,8 +129,8 @@ func (c *Determinator) Previous(v int) (int, error) {
 	}
 }
 
-// NewDeterminator returns a new Determinator.
-func NewDeterminator(optFuncs ...OptionFunc) (*Determinator, error) {
+// NewChecker returns a new Checker.
+func NewChecker(optFuncs ...OptionFunc) (*Checker, error) {
 	const (
 		defaultMinConsecutiveDigits = 3
 		defaultMinRepDigitDigits    = 2
@@ -149,5 +149,5 @@ func NewDeterminator(optFuncs ...OptionFunc) (*Determinator, error) {
 		}
 	}
 
-	return &Determinator{opts}, nil
+	return &Checker{opts}, nil
 }

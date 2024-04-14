@@ -41,21 +41,21 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	d, err := kiriban.NewDeterminator(kiriban.EnableDigitBasedRoundDetermination(), kiriban.ExceptionalKiribanOption(eks))
+	c, err := kiriban.NewChecker(kiriban.EnableDigitBasedRoundDetermination(), kiriban.ExceptionalKiribanOption(eks))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if !d.IsKiriban(issueNumber) {
-		fmt.Printf("#%d is not kiriban.\n", issueNumber)
+	if !c.IsKiriban(issueNumber) {
+		fmt.Printf("#%c is not kiriban.\n", issueNumber)
 		os.Exit(0)
 	}
 
-	fmt.Printf("#%d is kiriban!\n", issueNumber)
+	fmt.Printf("#%c is kiriban!\n", issueNumber)
 
 	ctx := context.Background()
 
-	ic := newIssueCommenter(newGithubClient(ctx, cfg.githubToken), d)
+	ic := newIssueCommenter(newGithubClient(ctx, cfg.githubToken), c)
 	comment, err := ic.execute(ctx, cfg, issueNumber)
 	if err != nil {
 		log.Fatalln(err)
