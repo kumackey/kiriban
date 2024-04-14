@@ -142,8 +142,8 @@ func calcPreviousKiribans(d *kiriban.Determinator, number, limit int) []int {
 	return list
 }
 
-func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo string, numbers []int) ([]string, error) {
-	users := make([]string, 0, len(numbers))
+func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo string, numbers []int) (map[int]string, error) {
+	users := make(map[int]string, len(numbers))
 
 	for _, number := range numbers {
 		// TODO: N+1 problem
@@ -153,7 +153,7 @@ func fetchIssueUsers(ctx context.Context, client *github.Client, owner, repo str
 			return nil, err
 		}
 
-		users = append(users, issue.User.GetLogin())
+		users[number] = "@" + issue.GetUser().GetLogin()
 	}
 
 	return users, nil
