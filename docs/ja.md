@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: kumackey/kiriban@v1
+        with:
+          LOCALE: 'ja'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -34,7 +36,7 @@ jobs:
 
 ### なされるコメント
 
-![Actionの結果、コメントされる](/img/comment.png)
+![Actionの結果、コメントされる](/img/comment_ja.png)
 
 ## キリ番とは？
 

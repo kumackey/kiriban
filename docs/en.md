@@ -34,7 +34,7 @@ jobs:
 
 ### The Comment Provided
 
-![The comment posted by the Action](/img/comment.png)
+![The comment posted by the Action](/img/comment_en.png)
 
 ## What is a Kiriban?
 
