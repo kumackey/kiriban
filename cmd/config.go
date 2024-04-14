@@ -2,20 +2,14 @@ package main
 
 import (
 	"errors"
-	"fmt"
+	"github.com/kumackey/kiriban/internal/domain"
 	"os"
-	"strings"
 )
-
-type repository struct {
-	owner string
-	repo  string
-}
 
 type config struct {
 	githubToken string
-	repository  repository
-	locale      locale
+	repository  domain.Repository
+	locale      domain.Locale
 }
 
 func loadConfig() (config, error) {
@@ -29,23 +23,19 @@ func loadConfig() (config, error) {
 		return config{}, errors.New("missing GITHUB_REPOSITORY")
 	}
 
-	parts := strings.Split(repo, "/")
-	if len(parts) != 2 {
-		return config{}, fmt.Errorf("invalid GITHUB_REPOSITORY: %s", repo)
-	}
-
-	loc, ok := os.LookupEnv("LOCALE")
-	if !ok {
-		loc = localeEn.String()
-	}
-	lcl, err := toLocale(loc)
+	rp, err := domain.NewRepository(repo)
 	if err != nil {
 		return config{}, err
 	}
 
-	return config{
-		githubToken: token,
-		repository:  repository{owner: parts[0], repo: parts[1]},
-		locale:      lcl,
-	}, nil
+	loc, ok := os.LookupEnv("LOCALE")
+	if !ok {
+		loc = domain.LocaleEn.String()
+	}
+	lcl, err := domain.ToLocale(loc)
+	if err != nil {
+		return config{}, err
+	}
+
+	return config{githubToken: token, repository: rp, locale: lcl}, nil
 }
