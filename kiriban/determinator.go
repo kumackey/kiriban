@@ -1,6 +1,7 @@
 package kiriban
 
 import (
+	"errors"
 	"math"
 	"strconv"
 	"strings"
