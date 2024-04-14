@@ -69,7 +69,7 @@ func main() {
 	owner, repo := parts[0], parts[1]
 
 	comment := &github.IssueComment{Body: github.String(
-		fmt.Sprintf("Congratulations! #%d is kiriban! 🎉\nNext kiriban is #%d.\n", issueNumber, d.Next(issueNumber)),
+		fmt.Sprintf("Congratulations! #%d is kiriban! 🎉\nNext kiriban is #%d .\n", issueNumber, d.Next(issueNumber)),
 	)}
 
 	ic, _, err := client.Issues.CreateComment(ctx, owner, repo, issueNumber, comment)
