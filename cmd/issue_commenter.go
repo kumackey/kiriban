@@ -4,48 +4,36 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/google/go-github/github"
-	"github.com/kumackey/kiriban/kiriban"
-	"golang.org/x/oauth2"
 	"log"
+
+	"github.com/kumackey/kiriban/kiriban"
 )
 
-type issueCommenter struct {
-	client *github.Client
+type IssueCommenter struct {
+	client GitHubClient
 	kc     *kiriban.Checker
 }
 
-func newIssueCommenter(client *github.Client, kc *kiriban.Checker) issueCommenter {
-	return issueCommenter{client: client, kc: kc}
+type GitHubClient interface {
+	CreateIssueComment(context.Context, repository, int, string) (string, error)
+	GetIssueUsers(context.Context, repository, []int) (map[int]string, error)
 }
 
-func newGithubClient(ctx context.Context, githubToken string) *github.Client {
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: githubToken},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
-
-	return client
+func NewIssueCommenter(client GitHubClient, kc *kiriban.Checker) IssueCommenter {
+	return IssueCommenter{client: client, kc: kc}
 }
 
-func (ic issueCommenter) execute(ctx context.Context, cfg config, v int) (*github.IssueComment, error) {
+// TODO: test
+func (ic IssueCommenter) Execute(ctx context.Context, cfg config, v int) (string, error) {
 	msg, err := ic.message(ctx, cfg.repository, v, cfg.locale)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	comment := &github.IssueComment{Body: github.String(msg)}
-	c, _, err := ic.client.Issues.CreateComment(ctx, cfg.repository.owner, cfg.repository.repo, v, comment)
-	if err != nil {
-		return nil, err
-	}
-
-	return c, nil
+	return ic.client.CreateIssueComment(ctx, cfg.repository, v, msg)
 }
 
-// TODO: required to test and refactor
-func (ic issueCommenter) message(ctx context.Context, repository repository, v int, l locale) (string, error) {
+func (ic IssueCommenter) message(ctx context.Context, repository repository, v int, l locale) (string, error) {
 	var msg string
 	next := ic.kc.Next(v)
 
@@ -61,7 +49,7 @@ func (ic issueCommenter) message(ctx context.Context, repository repository, v i
 	list := ic.calcPreviousKiribans(v, 8)
 	list = append(list, v)
 
-	users, err := ic.fetchIssueUsers(ctx, repository, list)
+	users, err := ic.client.GetIssueUsers(ctx, repository, list)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -91,7 +79,7 @@ func (ic issueCommenter) message(ctx context.Context, repository repository, v i
 	return msg, nil
 }
 
-func (ic issueCommenter) calcPreviousKiribans(number, limit int) []int {
+func (ic IssueCommenter) calcPreviousKiribans(number, limit int) []int {
 	list := make([]int, 0, limit+2) // +2 is for the current kiriban and the next kiriban
 
 	for limit > 0 {
@@ -105,21 +93,4 @@ func (ic issueCommenter) calcPreviousKiribans(number, limit int) []int {
 	}
 
 	return list
-}
-
-func (ic issueCommenter) fetchIssueUsers(ctx context.Context, repository repository, numbers []int) (map[int]string, error) {
-	users := make(map[int]string, len(numbers))
-
-	for _, number := range numbers {
-		// TODO: N+1 problem
-		issue, _, err := ic.client.Issues.Get(ctx, repository.owner, repository.repo, number)
-		if err != nil {
-			// TODO: Handle error
-			return nil, err
-		}
-
-		users[number] = issue.GetUser().GetLogin()
-	}
-
-	return users, nil
 }
