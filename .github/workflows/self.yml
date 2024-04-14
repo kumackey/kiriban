@@ -17,3 +17,8 @@ jobs:
       - uses: kumackey/kiriban@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: kumackey/kiriban@main
+        with:
+          LOCALE: 'ja'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
