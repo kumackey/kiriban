@@ -5,7 +5,7 @@
 
 This is a GitHub Actions that will congratulate you when you reach a milestone number (kiriban) for your issue or pull
 request number.
-It targets Issues or Pull Requests with numbers greater than 100.
+It targets Issues or Pull Requests with numbers greater than 10.
 It is under active development, and we welcome your issues and pull requests!
 
 ## How to Use

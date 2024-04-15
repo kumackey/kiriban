@@ -4,7 +4,7 @@
 |------------------------|---------|
 
 IssueやPull Requestの番号で、キリ番を引いたら祝ってくれるGitHub Actionsです。<br>
-100以上のIssueやPull Requestの番号からが対象です。<br>
+10以上のIssueやPull Requestの番号からが対象です。<br>
 鋭意開発中であり、IssueやPull Requestをお待ちしています！
 
 ## 使い方
