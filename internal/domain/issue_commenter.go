@@ -23,9 +23,8 @@ func NewIssueCommenter(client GitHubClient, kc *kiriban.Checker) IssueCommenter 
 	return IssueCommenter{client: client, kc: kc}
 }
 
-// TODO: test
 func (ic IssueCommenter) Execute(ctx context.Context, v int, repo Repository, locale Locale) (string, error) {
-	msg, err := ic.message(ctx, repo, v, locale)
+	msg, err := ic.Message(ctx, repo, v, locale)
 	if err != nil {
 		return "", err
 	}
@@ -33,7 +32,9 @@ func (ic IssueCommenter) Execute(ctx context.Context, v int, repo Repository, lo
 	return ic.client.CreateIssueComment(ctx, repo, v, msg)
 }
 
-func (ic IssueCommenter) message(ctx context.Context, repository Repository, v int, l Locale) (string, error) {
+// Message returns a message when the kiriban is reached.
+// This method is made public for testing purposes.
+func (ic IssueCommenter) Message(ctx context.Context, repository Repository, v int, l Locale) (string, error) {
 	var msg string
 	next := ic.kc.Next(v)
 
