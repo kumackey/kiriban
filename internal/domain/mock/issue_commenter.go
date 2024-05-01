@@ -56,10 +56,10 @@ func (mr *MockGitHubClientMockRecorder) CreateIssueComment(arg0, arg1, arg2, arg
 }
 
 // GetIssueUsers mocks base method.
-func (m *MockGitHubClient) GetIssueUsers(arg0 context.Context, arg1 domain.Repository, arg2 []int) (map[int]string, error) {
+func (m *MockGitHubClient) GetIssueUsers(arg0 context.Context, arg1 domain.Repository, arg2 []int) (map[int]domain.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetIssueUsers", arg0, arg1, arg2)
-	ret0, _ := ret[0].(map[int]string)
+	ret0, _ := ret[0].(map[int]domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

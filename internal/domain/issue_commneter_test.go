@@ -60,7 +60,21 @@ func TestIssueCommenter_Message(t *testing.T) {
 	repo, err := domain.NewRepository("kumackey/example")
 	assert.NoError(t, err)
 
-	users := map[int]string{777: "user1", 789: "user2", 800: "user3", 876: "user4", 888: "user5", 900: "user6", 987: "user7", 999: "user1", 1000: "user2"}
+	u := func(username string) domain.User {
+		return domain.NewUser(username, "https://example.com/"+username)
+	}
+
+	users := map[int]domain.User{
+		777:  u("user1"),
+		789:  u("user2"),
+		800:  u("user3"),
+		876:  u("user4"),
+		888:  u("user5"),
+		900:  u("user6"),
+		987:  u("user7"),
+		999:  u("user1"),
+		1000: u("user2"),
+	}
 	mockClient.EXPECT().GetIssueUsers(context.TODO(), repo, gomock.Any()).Return(users, nil).AnyTimes()
 
 	testCases := []struct {
