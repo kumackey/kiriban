@@ -17,15 +17,15 @@ const (
 
 | キリ番 | アカウント |
 | --- | --- |
-| #777 | @user1 |
-| #789 | @user2 |
-| #800 | @user3 |
-| #876 | @user4 |
-| #888 | @user5 |
-| #900 | @user6 |
-| #987 | @user7 |
-| #999 | @user1 |
-| #1000 | @user2 |
+| #777 | [user1](https://example.com/user1) |
+| #789 | [user2](https://example.com/user2) |
+| #800 | [user3](https://example.com/user3) |
+| #876 | [user4](https://example.com/user4) |
+| #888 | [user5](https://example.com/user5) |
+| #900 | [user6](https://example.com/user6) |
+| #987 | [user7](https://example.com/user7) |
+| #999 | [user1](https://example.com/user1) |
+| #1000 | [user2](https://example.com/user2) |
 | #1111 | まもなく…… |
 `
 	expectedEn = `Congratulations!🎉 #1000 is kiriban!
@@ -33,15 +33,15 @@ Next kiriban is #1111. But fleeing after stepping on kiriban is strictly forbidd
 
 | kiriban | account |
 | --- | --- |
-| #777 | @user1 |
-| #789 | @user2 |
-| #800 | @user3 |
-| #876 | @user4 |
-| #888 | @user5 |
-| #900 | @user6 |
-| #987 | @user7 |
-| #999 | @user1 |
-| #1000 | @user2 |
+| #777 | [user1](https://example.com/user1) |
+| #789 | [user2](https://example.com/user2) |
+| #800 | [user3](https://example.com/user3) |
+| #876 | [user4](https://example.com/user4) |
+| #888 | [user5](https://example.com/user5) |
+| #900 | [user6](https://example.com/user6) |
+| #987 | [user7](https://example.com/user7) |
+| #999 | [user1](https://example.com/user1) |
+| #1000 | [user2](https://example.com/user2) |
 | #1111 | Comming Soon... |
 `
 )

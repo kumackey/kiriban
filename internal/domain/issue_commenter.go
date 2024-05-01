@@ -74,7 +74,7 @@ func (ic IssueCommenter) Message(ctx context.Context, repository Repository, v i
 	}
 
 	for _, l := range list {
-		msg += fmt.Sprintf("| #%d | @%s |\n", l, users[l].login)
+		msg += fmt.Sprintf("| #%d | [%s](%s) |\n", l, users[l].login, users[l].url)
 	}
 
 	switch l {
