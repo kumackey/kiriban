@@ -14,9 +14,18 @@ type IssueCommenter struct {
 	kc     *kiriban.Checker
 }
 
+type User struct {
+	login string
+	url   string
+}
+
+func NewUser(login string, url string) User {
+	return User{login: login, url: url}
+}
+
 type GitHubClient interface {
 	CreateIssueComment(context.Context, Repository, int, string) (string, error)
-	GetIssueUsers(context.Context, Repository, []int) (map[int]string, error)
+	GetIssueUsers(context.Context, Repository, []int) (map[int]User, error)
 }
 
 func NewIssueCommenter(client GitHubClient, kc *kiriban.Checker) IssueCommenter {
@@ -65,7 +74,7 @@ func (ic IssueCommenter) Message(ctx context.Context, repository Repository, v i
 	}
 
 	for _, l := range list {
-		msg += fmt.Sprintf("| #%d | @%s |\n", l, users[l])
+		msg += fmt.Sprintf("| #%d | [%s](%s) |\n", l, users[l].login, users[l].url)
 	}
 
 	switch l {

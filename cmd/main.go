@@ -4,14 +4,15 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/google/go-github/github"
-	"github.com/kumackey/kiriban/internal/domain"
-	"github.com/kumackey/kiriban/kiriban"
-	"golang.org/x/oauth2"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/google/go-github/github"
+	"github.com/kumackey/kiriban/internal/domain"
+	"github.com/kumackey/kiriban/kiriban"
+	"golang.org/x/oauth2"
 )
 
 func main() {
@@ -115,8 +116,8 @@ func (g *githubClientImpl) CreateIssueComment(ctx context.Context, repository do
 	return issueComment.GetHTMLURL(), nil
 }
 
-func (g *githubClientImpl) GetIssueUsers(ctx context.Context, repository domain.Repository, numbers []int) (map[int]string, error) {
-	users := make(map[int]string, len(numbers))
+func (g *githubClientImpl) GetIssueUsers(ctx context.Context, repository domain.Repository, numbers []int) (map[int]domain.User, error) {
+	users := make(map[int]domain.User, len(numbers))
 	for _, number := range numbers {
 		// TODO: N+1 problem
 		issue, _, err := g.client.Issues.Get(ctx, repository.Owner, repository.Repo, number)
@@ -124,7 +125,7 @@ func (g *githubClientImpl) GetIssueUsers(ctx context.Context, repository domain.
 			return nil, err
 		}
 
-		users[number] = issue.GetUser().GetLogin()
+		users[number] = domain.NewUser(issue.GetUser().GetLogin(), issue.GetUser().GetHTMLURL())
 	}
 
 	return users, nil
