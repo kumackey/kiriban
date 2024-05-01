@@ -1,4 +1,4 @@
-name: 'Kiriban Action'
+name: 'Kiriban'
 description: 'This is a GitHub Actions that will congratulate you when you reach kiriban for your issue or pull
 request number.'
 author: 'kumackey <kumak1t09e0@gmail.com>'
