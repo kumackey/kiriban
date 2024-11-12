@@ -127,7 +127,7 @@ func ExampleChecker_Next() {
 	// 10000 Round
 }
 
-func ExampleKiribanIter() {
+func ExampleKiriban_Iter() {
 	opt := kiriban.ExceptionalKiribanOption([]kiriban.ExceptionalKiriban{
 		{Value: 1101, Reason: "birthday"},
 	})
