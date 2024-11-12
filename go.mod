@@ -1,9 +1,8 @@
 module github.com/kumackey/kiriban
 
-go 1.22.2
+go 1.23.0
 
 require (
-	github.com/golang/mock v1.6.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/mock v0.4.0

@@ -54,11 +54,11 @@ func main() {
 	}
 
 	if !c.IsKiriban(issueNumber) {
-		fmt.Printf("#%c is not kiriban.\n", issueNumber)
+		fmt.Printf("#%d is not kiriban.\n", issueNumber)
 		os.Exit(0)
 	}
 
-	fmt.Printf("#%c is kiriban!\n", issueNumber)
+	fmt.Printf("#%d is kiriban!\n", issueNumber)
 
 	ctx := context.Background()
 
