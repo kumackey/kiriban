@@ -18,11 +18,3 @@ test:
 .PHONY: mockgen
 mockgen:
 	mockgen -source=../internal/domain/issue_commenter.go -destination=../internal/domain/mock/issue_commenter.go -package=domainmock
-
-.PHONY: install-tools
-install-tools:
-	go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
-
-.PHONY: oapigen
-oapigen:
-	oapi-codegen -config ./openapi/config.yaml ./openapi/schema.yaml

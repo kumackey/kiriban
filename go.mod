@@ -4,6 +4,7 @@ go 1.23.0
 
 require (
 	github.com/google/go-github v17.0.0+incompatible
+	github.com/gorilla/mux v1.8.1
 	github.com/stretchr/testify v1.9.0
 	github.com/syumai/workers v0.27.0
 	go.uber.org/mock v0.4.0
