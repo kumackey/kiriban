@@ -23,7 +23,7 @@ runs:
           echo "Unsupported event name: ${{ github.event_name }}"
           exit 1
         fi
-        go run cmd/*.go -t ${{ github.event_name }} -u "${{ inputs.USER_DEFINED_KIRIBANS }}" $NUMBER
+        go run actions/cmd/*.go -t ${{ github.event_name }} -u "${{ inputs.USER_DEFINED_KIRIBANS }}" $NUMBER
       shell: bash
       working-directory: ${{ github.action_path }}
       env:
