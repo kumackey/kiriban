@@ -1,4 +1,4 @@
-name = "tinygo-worker"
+name = "kiriban"
 main = "./build/worker.mjs"
 compatibility_date = "2024-04-15"
 
