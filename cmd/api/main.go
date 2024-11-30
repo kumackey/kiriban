@@ -1,19 +1,24 @@
 package main
 
 import (
-	"io"
-	"net/http"
-
+	"encoding/json"
+	"github.com/kumackey/kiriban/internal/oapi"
 	"github.com/syumai/workers"
+	"net/http"
 )
 
 func main() {
-	http.HandleFunc("/hello", func(w http.ResponseWriter, req *http.Request) {
-		msg := "Hello!"
-		w.Write([]byte(msg))
-	})
-	http.HandleFunc("/echo", func(w http.ResponseWriter, req *http.Request) {
-		io.Copy(w, req.Body)
-	})
-	workers.Serve(nil) // use http.DefaultServeMux
+	mux := http.NewServeMux()
+	mux.Handle("/ping", http.HandlerFunc(GetPing))
+
+	workers.Serve(mux)
+}
+
+func GetPing(w http.ResponseWriter, r *http.Request) {
+	resp := oapi.Pong{
+		Ping: "pong!",
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(resp)
 }
