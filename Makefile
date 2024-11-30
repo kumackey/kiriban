@@ -10,3 +10,11 @@ build:
 .PHONY: deploy
 deploy:
 	wrangler deploy
+
+.PHONY: test
+test:
+	go test -v ./...
+
+.PHONY: mockgen
+mockgen:
+	mockgen -source=../internal/domain/issue_commenter.go -destination=../internal/domain/mock/issue_commenter.go -package=domainmock
