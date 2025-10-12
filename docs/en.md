@@ -26,6 +26,9 @@ on:
 jobs:
   kiriban:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: kumackey/kiriban@v1
         env:
