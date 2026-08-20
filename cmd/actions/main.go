@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -94,6 +95,11 @@ func toExceptionalKiribans(e string) ([]kiriban.ExceptionalKiriban, error) {
 
 type githubClientImpl struct {
 	client *github.Client
+
+	// httpClient is the authenticated client backing client, reused to call the
+	// GraphQL API which go-github does not cover.
+	httpClient      *http.Client
+	graphQLEndpoint string
 }
 
 func newGithubClient(ctx context.Context, githubToken string) *githubClientImpl {
@@ -103,7 +109,7 @@ func newGithubClient(ctx context.Context, githubToken string) *githubClientImpl 
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	return &githubClientImpl{client: client}
+	return &githubClientImpl{client: client, httpClient: tc, graphQLEndpoint: githubGraphQLEndpoint}
 }
 
 func (g *githubClientImpl) CreateIssueComment(ctx context.Context, repository domain.Repository, number int, comment string) (string, error) {
@@ -114,19 +120,4 @@ func (g *githubClientImpl) CreateIssueComment(ctx context.Context, repository do
 	}
 
 	return issueComment.GetHTMLURL(), nil
-}
-
-func (g *githubClientImpl) GetIssueUsers(ctx context.Context, repository domain.Repository, numbers []int) (map[int]domain.User, error) {
-	users := make(map[int]domain.User, len(numbers))
-	for _, number := range numbers {
-		// TODO: N+1 problem
-		issue, _, err := g.client.Issues.Get(ctx, repository.Owner, repository.Repo, number)
-		if err != nil {
-			return nil, err
-		}
-
-		users[number] = domain.NewUser(issue.GetUser().GetLogin(), issue.GetUser().GetHTMLURL())
-	}
-
-	return users, nil
 }
