@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v80/github"
 	"github.com/kumackey/kiriban/internal/domain"
 	"github.com/kumackey/kiriban/kiriban"
 	"golang.org/x/oauth2"

@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Wait for a release to have been public for a week before adopting it, so a
+    # compromised release is likely to have been yanked before it lands here.
+    cooldown:
+      default-days: 7
+    groups:
+      go_modules:
+        patterns:
+          - "*"
+
+  # Without this ecosystem the SHA-pinned actions would never be updated.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Wait for a release to have been public for a week before adopting it, so a
+    # compromised release is likely to have been yanked before it lands here.
+    cooldown:
+      default-days: 7
+    groups:
+      github_actions:
+        patterns:
+          - "*"
