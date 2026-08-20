@@ -13,9 +13,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    # Every value that comes from the workflow context is passed through the
-    # environment instead of being interpolated into the script, so that a value
-    # containing shell metacharacters cannot be executed as a command.
     - run: |
         if [[ "$EVENT_NAME" == "issues" ]]; then
           NUMBER="$ISSUE_NUMBER"

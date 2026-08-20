@@ -10,8 +10,6 @@ on:
       - synchronize
   workflow_dispatch:
 
-# The default token permissions are inherited from the repository settings,
-# which may grant write access. CI only ever needs to read the code.
 permissions:
   contents: read
 
@@ -19,17 +17,11 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      # Third-party actions are pinned to a commit SHA, because a tag can be
-      # moved to point at different code after it has been reviewed.
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
-          # Nothing here pushes back to the repository, so the token must not be
-          # left behind in .git/config where a later step could read it.
           persist-credentials: false
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          # go.mod is the single source of truth for the toolchain, so CI cannot
-          # drift away from the version the action builds with.
           go-version-file: 'go.mod'
       - name: go vet
         run: go vet ./...

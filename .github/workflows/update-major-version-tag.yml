@@ -5,7 +5,6 @@ on:
     tags:
       - "v*"
 
-# Moving the major version tag is the only write this workflow needs.
 permissions:
   contents: write
 
@@ -14,6 +13,4 @@ jobs:
     name: Update Major Version Tag
     runs-on: ubuntu-latest
     steps:
-      # Pinned to a commit SHA: this workflow hands a write-scoped token to a
-      # third-party action, so a moved tag would be a code execution vector.
       - uses: nowactions/update-majorver@f2014bbbba95b635e990ce512c5653bd0f4753fb # v1.1.2

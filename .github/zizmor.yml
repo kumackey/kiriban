@@ -2,8 +2,5 @@ rules:
   unpinned-uses:
     config:
       policies:
-        # The workflow that dogfoods this action has to run the action as it is
-        # on main, so a hash pin would defeat its purpose. It is this same
-        # repository, so it is not a third-party supply chain risk.
         kumackey/*: ref-pin
         "*": hash-pin
